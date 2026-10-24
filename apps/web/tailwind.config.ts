@@ -74,6 +74,25 @@ const config: Config = {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-4px)' },
         },
+        // Something new appearing on the board (played character/stage, DON pill).
+        'pop-in': {
+          '0%': { opacity: '0', transform: 'scale(0.5)' },
+          '70%': { opacity: '1', transform: 'scale(1.12)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        // Attacker lunges toward the enemy side, then settles back.
+        lunge: {
+          '0%': { transform: 'translateY(0)' },
+          '35%': { transform: 'translateY(-12px) scale(1.05)' },
+          '100%': { transform: 'translateY(0) scale(1)' },
+        },
+        // Red flash + shake for the card taking the hit.
+        'damage-pop': {
+          '0%': { transform: 'scale(1)', filter: 'brightness(1)' },
+          '25%': { transform: 'scale(1.08) rotate(-2deg)', filter: 'brightness(1.6) saturate(1.5)' },
+          '50%': { transform: 'scale(0.98) rotate(2deg)', filter: 'brightness(1.3)' },
+          '100%': { transform: 'scale(1)', filter: 'brightness(1)' },
+        },
       },
       animation: {
         'pulse-glow': 'pulse-glow 1.6s ease-in-out infinite',
@@ -83,6 +102,9 @@ const config: Config = {
         'poster-in': 'poster-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both',
         confetti: 'confetti 3s linear both',
         'bounce-soft': 'bounce-soft 1.4s ease-in-out infinite',
+        'pop-in': 'pop-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2) both',
+        lunge: 'lunge 0.45s ease-in-out',
+        'damage-pop': 'damage-pop 0.5s ease-in-out',
       },
     },
   },

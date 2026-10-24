@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import type { GameView, PlayerView } from '@/lib/types';
 import { Card, CardBack } from './Card';
 
@@ -63,26 +64,41 @@ const DonCoins = ({ player }: { player: PlayerView }) => {
 };
 
 /** Life as a sideways stack on the mat edge, like the physical game. */
-const LifeStack = ({ player }: { player: PlayerView }) => (
-  <div className="flex w-[11%] shrink-0 flex-col items-center gap-1 [direction:ltr]">
-    <span className="font-display text-[8px] tracking-widest text-brass-500 sm:text-[10px]">
-      LIFE {player.life.length}
-    </span>
-    {player.life.length === 0 ? (
-      <div className="zone-slot aspect-[838/600] w-full !border-bounty-600/60 !text-bounty-500">0</div>
-    ) : (
-      <div className="flex w-full flex-col gap-0.5">
-        {player.life.map((card, i) => (
-          <div key={card ? card.instanceId : i} className="relative w-full aspect-[838/600] overflow-hidden rounded-md">
-            <div className="absolute left-1/2 top-1/2 w-[71.6%] -translate-x-1/2 -translate-y-1/2 rotate-90">
-              {card ? <Card card={card} fluid /> : <CardBack fluid />}
+const LifeStack = ({ player }: { player: PlayerView }) => {
+  // Flinch with a damage pop whenever this stack loses a card.
+  const prevLife = useRef(player.life.length);
+  const [hit, setHit] = useState(false);
+  useEffect(() => {
+    if (player.life.length < prevLife.current) {
+      setHit(true);
+      const t = setTimeout(() => setHit(false), 600);
+      prevLife.current = player.life.length;
+      return () => clearTimeout(t);
+    }
+    prevLife.current = player.life.length;
+  }, [player.life.length]);
+
+  return (
+    <div className={`flex w-[11%] shrink-0 flex-col items-center gap-1 [direction:ltr] ${hit ? 'animate-damage-pop' : ''}`}>
+      <span className="font-display text-[8px] tracking-widest text-brass-500 sm:text-[10px]">
+        LIFE {player.life.length}
+      </span>
+      {player.life.length === 0 ? (
+        <div className="zone-slot aspect-[838/600] w-full !border-bounty-600/60 !text-bounty-500">0</div>
+      ) : (
+        <div className="flex w-full flex-col gap-0.5">
+          {player.life.map((card, i) => (
+            <div key={card ? card.instanceId : i} className="relative w-full aspect-[838/600] overflow-hidden rounded-md">
+              <div className="absolute left-1/2 top-1/2 w-[71.6%] -translate-x-1/2 -translate-y-1/2 rotate-90">
+                {card ? <Card card={card} fluid /> : <CardBack fluid />}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-);
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export function Board({ view, selected, targets, actionable, onCard }: Props) {
   const cardProps = (instanceId: string) => ({
@@ -91,6 +107,13 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
     onClick: targets.has(instanceId) || actionable.has(instanceId) || selected === instanceId
       ? () => onCard(instanceId)
       : undefined,
+    // Live combat: the attacker lunges, the target takes the hit.
+    fx:
+      view.combat?.attacker === instanceId
+        ? ('lunge' as const)
+        : view.combat?.target === instanceId
+          ? ('hit' as const)
+          : undefined,
   });
 
   /**
@@ -107,7 +130,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
         <div className="grid grid-cols-5 gap-1 sm:gap-2">
           {player.characters.map((c) => (
             <div key={c.instanceId} className="min-w-0">
-              <Card card={c} fluid {...(interactive ? cardProps(c.instanceId) : {})} />
+              <Card card={c} fluid pop {...(interactive ? cardProps(c.instanceId) : {})} />
             </div>
           ))}
           {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
@@ -133,6 +156,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             <Card
               card={player.stage}
               fluid
+              pop
               {...(interactive ? cardProps(player.stage.instanceId) : {})}
             />
           ) : undefined}
@@ -168,8 +192,8 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
         </div>
         <Slot label="trash">
           {topTrash ? (
-            <div className="relative">
-              <Card card={topTrash} fluid />
+            <div key={topTrash.instanceId} className="relative">
+              <Card card={topTrash} fluid pop />
               <CountBadge n={player.trash.length} />
             </div>
           ) : undefined}

@@ -15,15 +15,21 @@ interface Props {
   fluid?: boolean;
   /** Stagger the enter animation (ms) — used to "deal" hand cards one by one. */
   enterDelay?: number;
+  /** Board cards pop into their zone instead of sliding in. */
+  pop?: boolean;
+  /** Combat effect: the attacker lunges, the target takes a damage pop. */
+  fx?: 'lunge' | 'hit';
 }
 
 /** A card: art when it loads, a text face as fallback. Rested cards rotate. */
-export function Card({ card, selected, dimmed, highlight, onClick, small, fluid, enterDelay }: Props) {
+export function Card({ card, selected, dimmed, highlight, onClick, small, fluid, enterDelay, pop, fx }: Props) {
   const [artFailed, setArtFailed] = useState(false);
   const width = fluid ? 'w-full' : small ? 'w-12 sm:w-16' : 'w-16 sm:w-20 md:w-24';
+  const enterAnim =
+    fx === 'lunge' ? 'animate-lunge' : fx === 'hit' ? 'animate-damage-pop' : pop ? 'animate-pop-in' : 'animate-card-enter';
   return (
     <span
-      className={`group relative inline-block ${width} animate-card-enter ${
+      className={`group relative inline-block ${width} ${enterAnim} ${fx === 'lunge' ? 'z-20' : ''} ${
         card.state === 'rested' && !fluid ? 'mx-2 sm:mx-3' : ''
       }`}
       style={enterDelay ? { animationDelay: `${enterDelay}ms`, animationFillMode: 'backwards' } : undefined}
@@ -68,14 +74,17 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
           </div>
         )}
         {card.attachedDon > 0 && (
-          <span className="absolute left-0.5 top-0.5 flex items-center gap-0.5 rounded-full bg-black/80 px-1 py-px text-[10px] font-bold text-brass-300">
+          <span
+            key={card.attachedDon}
+            className="absolute left-0.5 top-0.5 flex animate-pop-in items-center gap-0.5 rounded-full bg-black/80 px-1 py-px text-[10px] font-bold text-brass-300"
+          >
             <span className="inline-block h-2 w-2 rounded-full bg-brass-400 shadow-[0_0_4px_rgba(227,187,95,0.8)]" />
             +{card.attachedDon}
           </span>
         )}
         {card.power !== null && !artFailed && (
           <span
-            className={`absolute bottom-0.5 left-0.5 rounded-full bg-black/85 px-1.5 py-px text-[10px] font-bold tabular-nums ${
+            className={`absolute bottom-0.5 left-0.5 rounded-full bg-black/85 px-1.5 py-px text-[10px] font-bold tabular-nums transition-colors duration-300 ${
               card.attachedDon > 0 ? 'text-bounty-400' : 'text-brass-300'
             }`}
           >
