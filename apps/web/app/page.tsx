@@ -191,92 +191,64 @@ export default function Home() {
   }, [puzzle, state]);
 
   if (error && !state) {
-    return <main className="mx-auto max-w-3xl p-6 text-red-300">{error}</main>;
+    return <main className="mx-auto max-w-3xl p-6 text-bounty-400">{error}</main>;
   }
   if (!puzzle || !state) {
-    return <main className="mx-auto max-w-3xl p-6 text-slate-400">Loading today’s puzzle…</main>;
+    return (
+      <main className="mx-auto max-w-3xl p-6 font-display text-lg tracking-wide text-brass-600">
+        Charting today’s waters…
+      </main>
+    );
   }
 
   const endTurnAction = state.actions.find((a) => a.key === 'endTurn');
+  const atPar = state.actionsSpent === state.par;
+  const diffBadge =
+    puzzle.difficulty === 'easy'
+      ? 'bg-emerald-900/60 text-emerald-300 ring-emerald-700'
+      : puzzle.difficulty === 'medium'
+        ? 'bg-amber-900/60 text-amber-300 ring-amber-700'
+        : 'bg-bounty-900/60 text-bounty-400 ring-bounty-700';
 
   return (
-    <main className="mx-auto max-w-4xl p-4">
-      <header className="mb-4 flex items-end justify-between">
-        <div>
-          <h1 className="text-xl font-bold">🏴‍☠️ OPDaily</h1>
-          <p className="text-sm text-slate-400">
-            {puzzle.date} · {puzzle.title} · <span className="capitalize">{puzzle.difficulty}</span>
-          </p>
-          {puzzle.flavor && <p className="text-xs italic text-slate-500">{puzzle.flavor}</p>}
-        </div>
-        <div className="text-right text-sm">
-          <div>
-            Actions <span className="font-bold">{state.actionsSpent}</span>
-            <span className="text-slate-500"> / par {state.par}</span>
+    <main className="mx-auto max-w-4xl p-3 pb-24 sm:p-4 sm:pb-24">
+      {/* Top bar */}
+      <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-3">
+          <h1 className="font-display text-3xl tracking-wide text-brass-300">
+            ☠ OPDaily
+          </h1>
+          <div className="flex flex-col">
+            <span className="flex items-center gap-2 text-sm text-slate-300">
+              {puzzle.date} · {puzzle.title}
+              <span
+                className={`rounded-full px-2 py-px text-[10px] font-semibold uppercase tracking-wide ring-1 ${diffBadge}`}
+              >
+                {puzzle.difficulty}
+              </span>
+            </span>
+            {puzzle.flavor && <span className="text-xs italic text-sea-600">{puzzle.flavor}</span>}
           </div>
-          {!done && <div className="tabular-nums text-slate-400">{fmtClock(elapsed)}</div>}
+        </div>
+        <div className="text-right">
+          <div className="text-lg font-bold tabular-nums">
+            <span className={state.actionsSpent > state.par ? 'text-bounty-400' : 'text-brass-300'}>
+              {state.actionsSpent}
+            </span>
+            <span className="text-sm font-normal text-slate-500"> / par {state.par}</span>
+          </div>
+          {!done && (
+            <div className="font-mono text-xs tabular-nums text-slate-500">{fmtClock(elapsed)}</div>
+          )}
         </div>
       </header>
 
-      {state.won ? (
-        <section className="mb-4 rounded-lg bg-emerald-950/70 p-4">
-          <h2 className="text-lg font-bold text-emerald-300">
-            Lethal! {state.actionsSpent === state.par ? 'Perfect — par.' : `${state.actionsSpent} actions (par ${state.par}).`}
-          </h2>
-          {state.teaches && <p className="mt-2 text-sm text-emerald-100">{state.teaches}</p>}
-          <div className="mt-3 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => navigator.clipboard.writeText(shareText)}
-              className="rounded bg-emerald-700 px-3 py-1 text-sm hover:bg-emerald-600"
-            >
-              Copy result
-            </button>
-            <span className="text-xs text-slate-400">{shareText}</span>
-          </div>
-          {!nameSaved && (
-            <form
-              className="mt-3 flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!name.trim()) return;
-                void setName(playerId(), name.trim()).then(() => {
-                  saveName(name.trim());
-                  setNameSaved(true);
-                });
-              }}
-            >
-              <input
-                value={name}
-                onChange={(e) => setNameInput(e.target.value)}
-                maxLength={24}
-                placeholder="Name for the leaderboard"
-                className="rounded bg-slate-800 px-2 py-1 text-sm"
-              />
-              <button type="submit" className="rounded bg-slate-700 px-3 py-1 text-sm hover:bg-slate-600">
-                Save
-              </button>
-            </form>
-          )}
-        </section>
-      ) : state.failed || state.solved ? (
-        <section className="mb-4 rounded-lg bg-red-950/70 p-4">
-          <h2 className="text-lg font-bold text-red-300">
-            {state.solved ? 'Already solved today.' : 'No lethal — the window closed.'}
-          </h2>
-          {!state.solved && (
-            <button
-              type="button"
-              onClick={() => void reset()}
-              className="mt-2 rounded bg-red-800 px-3 py-1 text-sm hover:bg-red-700"
-            >
-              Reset and try again
-            </button>
-          )}
-        </section>
-      ) : null}
-
-      {error && <div className="mb-3 rounded bg-red-950/70 px-3 py-1 text-sm text-red-200">{error}</div>}
+      {/* Error toast */}
+      {error && (
+        <div className="fixed left-1/2 top-4 z-[60] -translate-x-1/2 animate-overlay-in rounded-lg bg-bounty-900 px-4 py-2 text-sm text-red-100 shadow-glow-combat ring-1 ring-bounty-600">
+          {error}
+        </div>
+      )}
 
       <Board
         view={state.view}
@@ -286,49 +258,150 @@ export default function Home() {
         onCard={onCard}
       />
 
-      <div className="mt-4 flex flex-col gap-3">
-        {!done && (
-          <ActionPanel
-            choices={selectedActions.map((a) => ({ key: a.key, label: describe(a.key, names) }))}
-            pending={state.pending}
-            onAction={(key) => void apply({ key })}
-            onChoice={(choice) => void apply({ choice })}
-            onCancel={() => setSelected(null)}
-          />
-        )}
-        {!done && (
-          <div className="flex gap-2">
-            {endTurnAction && (
+      {/* Command bar — sticky bottom */}
+      {!done && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-sea-700 bg-sea-950/95 backdrop-blur">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-center gap-2 p-2 sm:p-3">
+            <div className="min-w-0 flex-1">
+              <ActionPanel
+                choices={selectedActions.map((a) => ({ key: a.key, label: describe(a.key, names) }))}
+                pending={state.pending}
+                onAction={(key) => void apply({ key })}
+                onChoice={(choice) => void apply({ choice })}
+                onCancel={() => setSelected(null)}
+              />
+              {selectedActions.length === 0 && !state.pending && (
+                <span className="text-xs text-sea-600">
+                  Tap a glowing card to see its orders.
+                </span>
+              )}
+            </div>
+            <div className="ml-auto flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => void apply({ key: 'endTurn' })}
-                className="rounded bg-slate-800 px-3 py-1 text-sm text-slate-300 hover:bg-slate-700"
+                onClick={() => void undo()}
+                className="rounded-lg bg-sea-800 px-3 py-1.5 text-sm text-slate-300 ring-1 ring-sea-600 transition-colors hover:bg-sea-700"
               >
-                End turn (give up the line)
+                Undo
               </button>
-            )}
-            <button
-              type="button"
-              onClick={() => void undo()}
-              className="rounded bg-slate-800 px-3 py-1 text-sm text-slate-300 hover:bg-slate-700"
-            >
-              Undo
-            </button>
-            <button
-              type="button"
-              onClick={() => void reset()}
-              className="rounded bg-slate-800 px-3 py-1 text-sm text-slate-300 hover:bg-slate-700"
-            >
-              Reset
-            </button>
+              <button
+                type="button"
+                onClick={() => void reset()}
+                className="rounded-lg bg-sea-800 px-3 py-1.5 text-sm text-slate-300 ring-1 ring-sea-600 transition-colors hover:bg-sea-700"
+              >
+                Reset
+              </button>
+              {endTurnAction && (
+                <button
+                  type="button"
+                  onClick={() => void apply({ key: 'endTurn' })}
+                  className="rounded-lg bg-bounty-700 px-3 py-1.5 text-sm font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600"
+                >
+                  ⏭ End turn
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <section className="mt-6 rounded-lg bg-slate-900/60 p-4">
-        <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-slate-400">Leaderboard</h2>
-        <Leaderboard puzzleId={puzzle.id} />
-      </section>
+      {/* Win / lose payoff overlay */}
+      {done && (
+        <div className="fixed inset-0 z-50 flex animate-overlay-in items-start justify-center overflow-y-auto bg-sea-950/90 p-4 sm:items-center">
+          {state.won ? (
+            <div className="my-8 w-full max-w-lg animate-poster-in rounded-2xl border-2 border-brass-600 bg-sea-900 p-6 shadow-[0_0_60px_rgba(201,155,63,0.25)] sm:my-0">
+              <div className="text-center">
+                <div className="font-display text-6xl tracking-wider text-brass-300">LETHAL.</div>
+                <div className="mt-2 text-sm text-slate-300">
+                  {atPar ? (
+                    <span className="text-brass-400">👑 Bounty claimed at par — {state.par} actions.</span>
+                  ) : (
+                    <>
+                      {state.actionsSpent} actions <span className="text-slate-500">(par {state.par})</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              {state.teaches && (
+                <p className="mt-4 rounded-lg border border-brass-700/50 bg-sea-850 p-3 text-sm leading-relaxed text-slate-200">
+                  {state.teaches}
+                </p>
+              )}
+              <div className="mt-4 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => navigator.clipboard.writeText(shareText)}
+                  className="rounded-lg bg-brass-600 px-4 py-1.5 text-sm font-semibold text-sea-950 transition-colors hover:bg-brass-500"
+                >
+                  Copy result
+                </button>
+                <span className="truncate text-xs text-slate-500">{shareText}</span>
+              </div>
+              {!nameSaved && (
+                <form
+                  className="mt-3 flex gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!name.trim()) return;
+                    void setName(playerId(), name.trim()).then(() => {
+                      saveName(name.trim());
+                      setNameSaved(true);
+                    });
+                  }}
+                >
+                  <input
+                    value={name}
+                    onChange={(e) => setNameInput(e.target.value)}
+                    maxLength={24}
+                    placeholder="Name for the bounty board"
+                    className="flex-1 rounded-lg bg-sea-800 px-3 py-1.5 text-sm ring-1 ring-sea-600 placeholder:text-sea-600 focus:outline-none focus:ring-brass-500"
+                  />
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-sea-700 px-4 py-1.5 text-sm text-slate-200 transition-colors hover:bg-sea-600"
+                  >
+                    Save
+                  </button>
+                </form>
+              )}
+              <div className="mt-5 border-t border-brass-900/60 pt-3">
+                <h2 className="mb-2 font-display text-lg tracking-widest text-brass-500">
+                  BOUNTY BOARD
+                </h2>
+                <Leaderboard puzzleId={puzzle.id} />
+              </div>
+            </div>
+          ) : (
+            <div className="my-8 w-full max-w-md animate-poster-in rounded-2xl border border-sea-600 bg-sea-900 p-6 sm:my-0">
+              <div className="text-center">
+                <div className="font-display text-4xl tracking-wide text-slate-400">
+                  The line slipped away.
+                </div>
+                <p className="mt-2 text-sm text-slate-500">
+                  {state.solved ? 'Already attempted today — the sea remembers.' : 'No lethal — the window closed.'}
+                </p>
+              </div>
+              {!state.solved && (
+                <div className="mt-5 text-center">
+                  <button
+                    type="button"
+                    onClick={() => void reset()}
+                    className="rounded-lg bg-bounty-700 px-6 py-2 font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600"
+                  >
+                    Reset and try again
+                  </button>
+                </div>
+              )}
+              <div className="mt-5 border-t border-sea-700 pt-3">
+                <h2 className="mb-2 font-display text-lg tracking-widest text-sea-600">
+                  BOUNTY BOARD
+                </h2>
+                <Leaderboard puzzleId={puzzle.id} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }

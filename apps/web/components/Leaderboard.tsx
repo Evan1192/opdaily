@@ -22,29 +22,37 @@ export function Leaderboard({ puzzleId }: { puzzleId: string }) {
       .catch(() => setEntries([]));
   }, [puzzleId]);
 
-  if (entries === null) return <div className="text-sm text-slate-500">Loading leaderboard…</div>;
-  if (entries.length === 0) return <div className="text-sm text-slate-500">No clears yet. Be the first.</div>;
+  if (entries === null) return <div className="text-sm text-slate-500">Loading bounty board…</div>;
+  if (entries.length === 0)
+    return <div className="text-sm text-slate-500">No bounties claimed yet. Be the first.</div>;
 
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="text-left text-xs uppercase tracking-wide text-slate-500">
-          <th className="py-1">#</th>
-          <th>Player</th>
-          <th>Actions</th>
-          <th>Time</th>
+        <tr className="text-left font-display text-xs tracking-widest text-brass-600">
+          <th className="py-1 font-normal">#</th>
+          <th className="font-normal">PIRATE</th>
+          <th className="font-normal">ACTIONS</th>
+          <th className="font-normal">TIME</th>
         </tr>
       </thead>
       <tbody>
         {entries.map((e) => (
-          <tr key={e.rank} className="border-t border-slate-800">
-            <td className="py-1">{e.rank}</td>
+          <tr
+            key={e.rank}
+            className={`border-t border-brass-900/60 ${
+              e.rank === 1 ? 'bg-brass-900/30 text-brass-300' : ''
+            }`}
+          >
+            <td className="py-1.5 tabular-nums">{e.rank === 1 ? '👑' : e.rank}</td>
             <td>{e.name}</td>
-            <td>
+            <td className="tabular-nums">
               {e.actions}
-              {par !== null && e.actions === par && <span className="ml-1 text-amber-400">★ par</span>}
+              {par !== null && e.actions === par && (
+                <span className="ml-1 text-brass-400">★ par</span>
+              )}
             </td>
-            <td>{fmtTime(e.elapsedMs)}</td>
+            <td className="tabular-nums">{fmtTime(e.elapsedMs)}</td>
           </tr>
         ))}
       </tbody>

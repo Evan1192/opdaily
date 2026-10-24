@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    /* Deep-sea vignette: radial light at top center falling into the navy base,
+       plus a faint compass rose drawn as an inline SVG so no asset is shipped. */
+    background-color: #060a14;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(42, 58, 107, 0.35), transparent),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%23c99b3f' stroke-opacity='0.04'%3E%3Ccircle cx='300' cy='300' r='250'/%3E%3Ccircle cx='300' cy='300' r='180'/%3E%3Cpath d='M300 40 L320 280 L560 300 L320 320 L300 560 L280 320 L40 300 L280 280 Z' fill='%23c99b3f' fill-opacity='0.025' stroke='none'/%3E%3Cpath d='M300 50 V550 M50 300 H550 M120 120 L480 480 M480 120 L120 480' stroke-dasharray='2 6'/%3E%3C/g%3E%3C/svg%3E");
+    background-position: center top, right -150px top -150px;
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a1022;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1d2a52;
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2a3a6b;
+  }
+}
+
+@layer components {
+  /* Dashed empty zone slot on the playmat. */
+  .zone-slot {
+    @apply flex items-center justify-center rounded-md border border-dashed border-sea-600/50 text-[9px] font-semibold uppercase tracking-widest text-sea-600;
+  }
+}
