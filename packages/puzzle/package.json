@@ -1,0 +1,20 @@
+{
+  "name": "@opdaily/puzzle",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@optcg/core": "file:../../vendor/optcg-core.tgz",
+    "@optcg/cards": "file:../../vendor/optcg-cards.tgz",
+    "@optcg/data": "file:../../vendor/optcg-data.tgz",
+    "zod": "^3.23.0"
+  }
+}

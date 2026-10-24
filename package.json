@@ -1,0 +1,27 @@
+{
+  "name": "opdaily",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "typecheck": "tsc --build --dry || tsc --build",
+    "test": "vitest run",
+    "vendor:engine": "node scripts/vendor-engine.mjs",
+    "build:cards": "node scripts/build-card-metadata.mjs",
+    "verify:puzzles": "node scripts/verify-puzzles.mjs"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "@types/node": "^20.14.0"
+  }
+}

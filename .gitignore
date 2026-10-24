@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.next/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+puzzles/*.solution.json
+.vercel/
+.DS_Store
