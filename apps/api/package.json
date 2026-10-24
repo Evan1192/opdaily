@@ -1,0 +1,22 @@
+{
+  "name": "@opdaily/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@opdaily/puzzle": "0.1.0",
+    "@optcg/core": "file:../../vendor/optcg-core.tgz",
+    "fastify": "^4.28.0",
+    "pg": "^8.12.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0"
+  }
+}
