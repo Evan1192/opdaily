@@ -1,0 +1,24 @@
+{
+  "id": "no-blockers-allowed",
+  "date": "2026-10-28",
+  "title": "No Blockers Allowed",
+  "flavor": "The little doctor stands in your way. Sanji has opinions about that.",
+  "decks": [
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-016", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-006", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "hand": ["ST01-016"],
+    "don": 2,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST01-001",
+    "characters": ["ST01-006"],
+    "lifeCards": []
+  },
+  "maxActions": 3,
+  "difficulty": "medium",
+  "teaches": "A blocker eats your attack no matter how much power you stack — blocking redirects the hit entirely. Diable Jambe removes the option: name your leader, and Chopper can only watch the kick land."
+}

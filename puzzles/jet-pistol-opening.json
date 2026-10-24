@@ -1,0 +1,24 @@
+{
+  "id": "jet-pistol-opening",
+  "date": "2026-11-04",
+  "title": "Jet Pistol Opening",
+  "flavor": "Six thousand power of sand stands between you and the win.",
+  "decks": [
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-015", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Blue Warlords", "leader": "ST03-001", "cards": [["ST03-003", 4], ["ST03-002", 4], ["ST03-006", 4], ["ST03-008", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "hand": ["ST01-015"],
+    "don": 5,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST03-001",
+    "characters": ["ST03-003"],
+    "lifeCards": []
+  },
+  "maxActions": 3,
+  "difficulty": "easy",
+  "teaches": "Crocodile blocks and your 5000 leader loses to his 6000. Gum-Gum Jet Pistol K.O.s anything up to exactly 6000 power — clear him first, then the swing is uncontested. Removal before combat beats power during it."
+}

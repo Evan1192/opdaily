@@ -1,0 +1,23 @@
+{
+  "id": "ace-counts-to-two",
+  "date": "2026-11-05",
+  "title": "Ace Counts to Two",
+  "flavor": "Double Attack deals its damage one card at a time. Count what each card does.",
+  "decks": [
+    { "name": "Red Fire", "leader": "ST01-001", "cards": [["P-028", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Blue Warlords", "leader": "ST03-001", "cards": [["ST03-013", 4], ["ST03-002", 4], ["ST03-006", 4], ["ST03-008", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "characters": ["P-028"],
+    "don": 1,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST03-001",
+    "lifeCards": ["ST01-003", "ST03-013"]
+  },
+  "maxActions": 3,
+  "difficulty": "hard",
+  "teaches": "Boa Hancock is their bottom life card. Lead with Ace and his second hit flips her trigger onto the board as a blocker with your attacks spent. Lead with the leader instead: it takes the plain card, then Ace's Double Attack flips Boa with the first hit and wins with the second — a trigger blocker can't block the attack that revealed it."
+}

@@ -1,0 +1,25 @@
+{
+  "id": "over-the-guard",
+  "date": "2026-10-27",
+  "title": "Over the Guard",
+  "flavor": "You can see the counter in their hand. Count past it.",
+  "decks": [
+    { "name": "Red Luffy", "leader": "ST01-001", "cards": [["OP04-014", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-014", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "characters": ["OP04-014"],
+    "don": 1,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST01-001",
+    "knownHand": ["ST01-014"],
+    "don": 1,
+    "lifeCards": []
+  },
+  "maxActions": 3,
+  "difficulty": "medium",
+  "teaches": "Guard Point gives +3000, taking their 5000 leader to 8000. Your 9000 Luffy clears that ceiling — the counter cannot save them, so one swing ends it. Any smaller attack invites the counter and fails."
+}

@@ -1,0 +1,22 @@
+{
+  "id": "kaido-pays-the-toll",
+  "date": "2026-10-31",
+  "title": "Kaido Pays the Toll",
+  "flavor": "Seven DON!! is a steep price. Losing to a free blocker is steeper.",
+  "decks": [
+    { "name": "Kaido Beatdown", "leader": "ST04-001", "cards": [["ST04-004", 4], ["ST04-005", 4], ["ST04-008", 4], ["ST01-003", 4]] },
+    { "name": "Blue Warlords", "leader": "ST03-001", "cards": [["ST03-013", 4], ["ST03-002", 4], ["ST03-006", 4], ["ST03-008", 4]] }
+  ],
+  "you": {
+    "leader": "ST04-001",
+    "don": 8,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST03-001",
+    "lifeCards": ["ST03-013"]
+  },
+  "maxActions": 3,
+  "difficulty": "easy",
+  "teaches": "Their last life card is Boa Hancock — hit it and her trigger puts a blocker in front of your only attacker. Kaido's ability trashes the life card instead: no damage, no trigger. Then the leader swing lands on an empty board."
+}

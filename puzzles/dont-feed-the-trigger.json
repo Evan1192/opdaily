@@ -1,0 +1,23 @@
+{
+  "id": "dont-feed-the-trigger",
+  "date": "2026-10-25",
+  "title": "Don't Feed the Trigger",
+  "flavor": "Their last life card is hiding something. Don't let it out.",
+  "decks": [
+    { "name": "Red Luffy", "leader": "ST01-001", "cards": [["OP04-014", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Blue Warlords", "leader": "ST03-001", "cards": [["ST03-013", 4], ["ST03-002", 4], ["ST03-006", 4], ["ST03-008", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "characters": ["OP04-014"],
+    "don": 1,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST03-001",
+    "lifeCards": ["ST03-013"]
+  },
+  "maxActions": 3,
+  "difficulty": "medium",
+  "teaches": "Their last life card is Boa Hancock — [Trigger] Play this card, a free Blocker. Luffy has [Banish]: his damage trashes the life card without activating its trigger. Banish the life away first, then the leader lands the kill. Swing the leader first and the trigger blocker eats your finisher."
+}

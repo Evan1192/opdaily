@@ -1,0 +1,25 @@
+{
+  "id": "brooks-encore",
+  "date": "2026-11-02",
+  "title": "Brook's Encore",
+  "flavor": "Two rested DON!! are useless on the table. Brook knows where they belong.",
+  "decks": [
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-011", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-011", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "hand": ["ST01-011"],
+    "don": 2,
+    "restedDon": 2,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST01-001",
+    "knownHand": ["ST01-011"],
+    "lifeCards": []
+  },
+  "maxActions": 3,
+  "difficulty": "medium",
+  "teaches": "Their Brook counters for +2000, so your swing must reach 7000. Rested DON!! cannot be attached by hand — but your Brook's On Play moves both of them to the leader at once. 5000 + 2000 meets their 7000, and attacks win ties."
+}

@@ -1,0 +1,23 @@
+{
+  "id": "double-erasure",
+  "date": "2026-10-26",
+  "title": "Double Erasure",
+  "flavor": "Two life cards, two triggers, one attack that silences both.",
+  "decks": [
+    { "name": "Wano Yamato", "leader": "OP06-022", "cards": [["OP01-121", 4], ["ST02-003", 4], ["ST02-006", 4], ["ST02-008", 4]] },
+    { "name": "Big Mom Pirates", "leader": "ST07-001", "cards": [["ST07-007", 4], ["OP14-106", 4], ["ST04-009", 4], ["ST04-007", 4]] }
+  ],
+  "you": {
+    "leader": "OP06-022",
+    "characters": ["OP01-121"],
+    "restedDon": 2,
+    "lifeCards": ["ST02-003"]
+  },
+  "opponent": {
+    "leader": "ST07-001",
+    "lifeCards": ["ST07-007", "OP14-106"]
+  },
+  "maxActions": 3,
+  "difficulty": "hard",
+  "teaches": "Both of their life cards are trigger Blockers. Yamato has [Banish] and [Double Attack]: one swing deals two damage and trashes both life cards without triggering either. Lead with your leader instead and two free Blockers hit the board."
+}

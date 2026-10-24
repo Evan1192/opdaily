@@ -1,0 +1,23 @@
+{
+  "id": "usopp-reads-the-stats",
+  "date": "2026-11-06",
+  "title": "Usopp Reads the Stats",
+  "flavor": "The sniper checked the blocker's power. Did you?",
+  "decks": [
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-002", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Red Chopper", "leader": "ST01-001", "cards": [["P-101", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "characters": [{ "id": "ST01-002", "don": 3 }],
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST01-001",
+    "characters": ["P-101"],
+    "lifeCards": []
+  },
+  "maxActions": 2,
+  "difficulty": "medium",
+  "teaches": "Chopper has exactly 5000 power — and Usopp with two DON!! forbids blockers of 5000 or more. Three attached DON!! put Usopp at 5000 too, and attacks win ties. The leader swing looks identical but Chopper is allowed to block that one."
+}

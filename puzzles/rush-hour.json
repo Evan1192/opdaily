@@ -1,0 +1,24 @@
+{
+  "id": "rush-hour",
+  "date": "2026-10-29",
+  "title": "Rush Hour",
+  "flavor": "Seven DON!!, one card in hand, and two walls in the way.",
+  "decks": [
+    { "name": "Zoro Rush", "leader": "OP01-001", "cards": [["ST01-012", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Kid Pirates", "leader": "ST02-001", "cards": [["ST02-013", 4], ["ST02-004", 4], ["ST02-006", 4], ["ST02-008", 4]] }
+  ],
+  "you": {
+    "leader": "OP01-001",
+    "hand": ["ST01-012"],
+    "don": 7,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST02-001",
+    "characters": ["ST02-013", "ST02-004"],
+    "lifeCards": []
+  },
+  "maxActions": 5,
+  "difficulty": "hard",
+  "teaches": "One blocker can be baited with a spare attack — two cannot. Rush lets Luffy swing the turn he lands, and with two DON!! attached his ability shuts blockers off entirely. Budget the seven DON!!: five to play him, two to silence both walls."
+}

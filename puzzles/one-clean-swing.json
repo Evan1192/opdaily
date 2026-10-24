@@ -1,0 +1,23 @@
+{
+  "id": "one-clean-swing",
+  "date": "2026-10-24",
+  "title": "One Clean Swing",
+  "flavor": "The board is yours. Do not waste motion.",
+  "decks": [
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-002", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-002", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "don": 1,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST01-001",
+    "characters": [{ "id": "ST01-009", "rested": true }],
+    "lifeCards": []
+  },
+  "maxActions": 2,
+  "difficulty": "easy",
+  "teaches": "At zero life, any successful hit on the leader ends the game. Attacks succeed on ties, so your 5000 leader beats their 5000 leader. Extra setup is extra actions — swing directly."
+}

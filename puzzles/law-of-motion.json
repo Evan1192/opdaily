@@ -1,0 +1,23 @@
+{
+  "id": "law-of-motion",
+  "date": "2026-11-01",
+  "title": "Law of Motion",
+  "flavor": "Room. Shambles. The blocker was never there.",
+  "decks": [
+    { "name": "Law Tempo", "leader": "ST10-001", "cards": [["ST10-010", 4], ["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4]] },
+    { "name": "Blue Warlords", "leader": "ST03-001", "cards": [["ST03-013", 4], ["ST03-002", 4], ["ST03-006", 4], ["ST03-008", 4]] }
+  ],
+  "you": {
+    "leader": "ST10-001",
+    "don": 4,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST03-001",
+    "characters": ["ST03-013"],
+    "lifeCards": []
+  },
+  "maxActions": 3,
+  "difficulty": "easy",
+  "teaches": "Boa Hancock only has 1000 power, but a blocker does not need power to ruin your day — blocking redirects your only attack. Law's ability sends her to the bottom of the deck first; power pumps cannot solve what removal solves."
+}

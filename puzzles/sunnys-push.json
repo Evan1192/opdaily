@@ -1,0 +1,24 @@
+{
+  "id": "sunnys-push",
+  "date": "2026-10-30",
+  "title": "The Sunny's Push",
+  "flavor": "You can see the counter in their hand. The ship can see it too.",
+  "decks": [
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-017", 4], ["ST01-003", 4], ["ST01-009", 4], ["ST01-005", 4]] },
+    { "name": "Straw Hat Aggro", "leader": "ST01-001", "cards": [["ST01-003", 4], ["ST01-004", 4], ["ST01-005", 4], ["ST01-009", 4]] }
+  ],
+  "you": {
+    "leader": "ST01-001",
+    "characters": ["ST01-009"],
+    "stage": "ST01-017",
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST01-001",
+    "knownHand": ["ST01-003"],
+    "lifeCards": []
+  },
+  "maxActions": 3,
+  "difficulty": "easy",
+  "teaches": "Attacks win ties — but their Karoo counters for +1000, so a bare 5000 swing gets turned away. Rest the Thousand Sunny first: at 6000 your leader beats the counter on the tie. Vivi is not a Straw Hat, so the ship can only push the leader."
+}

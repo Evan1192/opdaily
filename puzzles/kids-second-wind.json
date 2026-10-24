@@ -1,0 +1,24 @@
+{
+  "id": "kids-second-wind",
+  "date": "2026-11-03",
+  "title": "Kid's Second Wind",
+  "flavor": "They have one blocker. You have one attacker. Kid laughs at the math.",
+  "decks": [
+    { "name": "Kid Pirates", "leader": "ST02-001", "cards": [["ST02-004", 4], ["ST02-006", 4], ["ST02-008", 4], ["ST02-013", 4]] },
+    { "name": "Kid Pirates", "leader": "ST02-001", "cards": [["ST02-004", 4], ["ST02-006", 4], ["ST02-008", 4], ["ST02-013", 4]] }
+  ],
+  "you": {
+    "leader": "ST02-001",
+    "hand": ["ST02-006"],
+    "don": 4,
+    "lifeCards": ["ST01-003"]
+  },
+  "opponent": {
+    "leader": "ST02-001",
+    "characters": ["ST02-004"],
+    "lifeCards": []
+  },
+  "maxActions": 4,
+  "difficulty": "medium",
+  "teaches": "A blocker only blocks once — it rests to do it. Swing into the block on purpose, then pay Kid's ability (rest 3 DON!!, trash a card) to stand your leader back up. The second swing has nothing left in its way. Untapping before you attack wastes the once-per-turn."
+}

@@ -1,4 +1,948 @@
 {
   "snapshot": "2026-10-20",
-  "cards": []
+  "cards": [
+    {
+      "id": "OP01-001",
+      "name": "Roronoa Zoro",
+      "cardType": "Leader",
+      "colors": [
+        "Red"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 5,
+      "attribute": "Slash",
+      "subtypes": [
+        "Supernovas",
+        "Straw Hat Crew"
+      ],
+      "text": "[DON!! x1] [Your Turn] All of your Characters gain +1000 power.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "OP01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-001.png"
+    },
+    {
+      "id": "OP01-121",
+      "name": "Yamato",
+      "cardType": "Character",
+      "colors": [
+        "Green"
+      ],
+      "cost": 5,
+      "power": 5000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Land of Wano"
+      ],
+      "text": "Also treat this card's name as [Kouzuki Oden] according to the rules.\n[Double Attack] (This card deals 2 damage.)\n[Banish] (When this card deals damage, the target card is trashed without activating its Trigger.)",
+      "triggerText": "",
+      "keywords": [
+        "DoubleAttack",
+        "Banish"
+      ],
+      "set": "OP01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-121.png"
+    },
+    {
+      "id": "OP04-014",
+      "name": "Monkey.D.Luffy",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 8,
+      "power": 9000,
+      "counter": null,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Alabasta",
+        "Straw Hat Crew"
+      ],
+      "text": "[Banish] (When this card deals damage, the target card is trashed without activating its Trigger.)",
+      "triggerText": "",
+      "keywords": [
+        "Banish"
+      ],
+      "set": "OP04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/OP04-014.png"
+    },
+    {
+      "id": "OP06-022",
+      "name": "Yamato",
+      "cardType": "Leader",
+      "colors": [
+        "Green",
+        "Yellow"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 4,
+      "attribute": "Strike",
+      "subtypes": [
+        "Land of Wano"
+      ],
+      "text": "[Double Attack] (This card deals 2 damage.)\n[Activate: Main] [Once Per Turn] If your opponent has 3 or less Life cards, give up to 2 rested DON!! cards to 1 of your Characters.",
+      "triggerText": "",
+      "keywords": [
+        "DoubleAttack"
+      ],
+      "set": "OP06",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/OP06-022.png"
+    },
+    {
+      "id": "OP14-106",
+      "name": "Salome",
+      "cardType": "Character",
+      "colors": [
+        "Yellow"
+      ],
+      "cost": 3,
+      "power": 1000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal",
+        "Amazon Lily"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+      "triggerText": "[Trigger] Play this card.",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "OP14",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/OP14-106.png"
+    },
+    {
+      "id": "P-028",
+      "name": "Portgas.D.Ace",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 5,
+      "power": 6000,
+      "counter": null,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "Whitebeard Pirates"
+      ],
+      "text": "[Double Attack] (This card deals 2 damage.)",
+      "triggerText": "",
+      "keywords": [
+        "DoubleAttack"
+      ],
+      "set": "P",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/P-028.png"
+    },
+    {
+      "id": "P-101",
+      "name": "Tony Tony.Chopper",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 4,
+      "power": 5000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal",
+        "Straw Hat Crew"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On Play] Give up to 1 rested DON!! card to your Leader.",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "P",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/P-101.png"
+    },
+    {
+      "id": "ST01-001",
+      "name": "Monkey.D.Luffy",
+      "cardType": "Leader",
+      "colors": [
+        "Red"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 5,
+      "attribute": "Strike",
+      "subtypes": [
+        "Supernovas",
+        "Straw Hat Crew"
+      ],
+      "text": "[Activate: Main] [Once Per Turn] Give this Leader or 1 of your Characters up to 1 rested DON!! card.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-001.png"
+    },
+    {
+      "id": "ST01-002",
+      "name": "Usopp",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 2,
+      "power": 2000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Ranged",
+      "subtypes": [
+        "Straw Hat Crew"
+      ],
+      "text": "[DON!! x2] [When Attacking] Your opponent cannot activate a [Blocker] Character that has 5000 or more power during this battle.",
+      "triggerText": "[Trigger] Play this card.",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-002.png"
+    },
+    {
+      "id": "ST01-003",
+      "name": "Karoo",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 1,
+      "power": 3000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal",
+        "Alabasta"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-003.png"
+    },
+    {
+      "id": "ST01-004",
+      "name": "Sanji",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 2,
+      "power": 4000,
+      "counter": null,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Straw Hat Crew"
+      ],
+      "text": "[DON!! x2] This Character gains [Rush].\n(This card can attack on the turn in which it is played.)",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-004.png"
+    },
+    {
+      "id": "ST01-005",
+      "name": "Jinbe",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 3,
+      "power": 5000,
+      "counter": null,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Fish-Man",
+        "Straw Hat Crew"
+      ],
+      "text": "[DON!! x1] [When Attacking] Up to 1 of your Leader or Character cards other than this card gains +1000 power during this turn.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-005.png"
+    },
+    {
+      "id": "ST01-006",
+      "name": "Tony Tony.Chopper",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 1,
+      "power": 1000,
+      "counter": null,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal",
+        "Straw Hat Crew"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-006.png"
+    },
+    {
+      "id": "ST01-009",
+      "name": "Nefeltari Vivi",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 2,
+      "power": 4000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Slash",
+      "subtypes": [
+        "Alabasta"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-009.png"
+    },
+    {
+      "id": "ST01-011",
+      "name": "Brook",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 2,
+      "power": 3000,
+      "counter": 2000,
+      "life": null,
+      "attribute": "Slash",
+      "subtypes": [
+        "Straw Hat Crew"
+      ],
+      "text": "[On Play] Give up to 2 rested DON!! cards to your Leader or 1 of your Characters.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-011.png"
+    },
+    {
+      "id": "ST01-012",
+      "name": "Monkey.D.Luffy",
+      "cardType": "Character",
+      "colors": [
+        "Red"
+      ],
+      "cost": 5,
+      "power": 6000,
+      "counter": null,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Supernovas",
+        "Straw Hat Crew"
+      ],
+      "text": "[Rush] (This card can attack on the turn in which it is played.)\n[DON!! x2] [When Attacking] Your opponent cannot activate [Blocker] during this battle.",
+      "triggerText": "",
+      "keywords": [
+        "Rush"
+      ],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-012.png"
+    },
+    {
+      "id": "ST01-014",
+      "name": "Guard Point",
+      "cardType": "Event",
+      "colors": [
+        "Red"
+      ],
+      "cost": 1,
+      "power": null,
+      "counter": null,
+      "life": null,
+      "attribute": null,
+      "subtypes": [
+        "Animal",
+        "Straw Hat Crew"
+      ],
+      "text": "[Counter] Up to 1 of your Leader or Character cards gains +3000 power during this battle.",
+      "triggerText": "[Trigger] Up to 1 of your Leader or Character cards gains +1000 power during this turn.",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-014.png"
+    },
+    {
+      "id": "ST01-015",
+      "name": "Gum-Gum Jet Pistol",
+      "cardType": "Event",
+      "colors": [
+        "Red"
+      ],
+      "cost": 4,
+      "power": null,
+      "counter": null,
+      "life": null,
+      "attribute": null,
+      "subtypes": [
+        "Supernovas",
+        "Straw Hat Crew"
+      ],
+      "text": "[Main] K.O. up to 1 of your opponent's Characters with 6000 power or less.",
+      "triggerText": "[Trigger] Activate this card's [Main] effect.",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-015.png"
+    },
+    {
+      "id": "ST01-016",
+      "name": "Diable Jambe",
+      "cardType": "Event",
+      "colors": [
+        "Red"
+      ],
+      "cost": 1,
+      "power": null,
+      "counter": null,
+      "life": null,
+      "attribute": null,
+      "subtypes": [
+        "Straw Hat Crew"
+      ],
+      "text": "[Main] Select up to 1 of your {Straw Hat Crew} type Leader or Character cards. Your opponent cannot activate [Blocker] if that Leader or Character attacks during this turn.",
+      "triggerText": "[Trigger] K.O. up to 1 of your opponent's [Blocker] Characters with a cost of 3 or less.",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-016.png"
+    },
+    {
+      "id": "ST01-017",
+      "name": "Thousand Sunny",
+      "cardType": "Stage",
+      "colors": [
+        "Red"
+      ],
+      "cost": 2,
+      "power": null,
+      "counter": null,
+      "life": null,
+      "attribute": null,
+      "subtypes": [
+        "Straw Hat Crew"
+      ],
+      "text": "[Activate: Main] You may rest this Stage: Up to 1 {Straw Hat Crew} type Leader or Character card on your field gains +1000 power during this turn.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST01",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-017.png"
+    },
+    {
+      "id": "ST02-001",
+      "name": "Eustass\"Captain\"Kid",
+      "cardType": "Leader",
+      "colors": [
+        "Green"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 5,
+      "attribute": "Special",
+      "subtypes": [
+        "Supernovas",
+        "Kid Pirates"
+      ],
+      "text": "[Activate: Main] [Once Per Turn] ③ (You may rest the specified number of DON!! cards in your cost area.) You may trash 1 card from your hand: Set this Leader as active.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST02",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-001.png"
+    },
+    {
+      "id": "ST02-003",
+      "name": "Urouge",
+      "cardType": "Character",
+      "colors": [
+        "Green"
+      ],
+      "cost": 2,
+      "power": 3000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Supernovas",
+        "Fallen Monk Pirates"
+      ],
+      "text": "[DON!! x1] If you have 3 or more Characters, this card gains +2000 power.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST02",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-003.png"
+    },
+    {
+      "id": "ST02-004",
+      "name": "Capone\"Gang\"Bege",
+      "cardType": "Character",
+      "colors": [
+        "Green"
+      ],
+      "cost": 1,
+      "power": 1000,
+      "counter": null,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "Supernovas",
+        "Firetank Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST02",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-004.png"
+    },
+    {
+      "id": "ST02-006",
+      "name": "Koby",
+      "cardType": "Character",
+      "colors": [
+        "Green"
+      ],
+      "cost": 4,
+      "power": 6000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Navy"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST02",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-006.png"
+    },
+    {
+      "id": "ST02-008",
+      "name": "Scratchmen Apoo",
+      "cardType": "Character",
+      "colors": [
+        "Green"
+      ],
+      "cost": 2,
+      "power": 3000,
+      "counter": 2000,
+      "life": null,
+      "attribute": "Ranged",
+      "subtypes": [
+        "Supernovas",
+        "On-Air Pirates"
+      ],
+      "text": "[DON!! x1] [When Attacking] Rest up to 1 of your opponent's DON!! cards.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST02",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-008.png"
+    },
+    {
+      "id": "ST02-013",
+      "name": "Eustass\"Captain\"Kid",
+      "cardType": "Character",
+      "colors": [
+        "Green"
+      ],
+      "cost": 7,
+      "power": 7000,
+      "counter": null,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "Supernovas",
+        "Kid Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[DON!! x1] [End of Your Turn] Set this Character as active.",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST02",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-013.png"
+    },
+    {
+      "id": "ST03-001",
+      "name": "Crocodile",
+      "cardType": "Leader",
+      "colors": [
+        "Blue"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 5,
+      "attribute": "Special",
+      "subtypes": [
+        "The Seven Warlords of the Sea",
+        "Baroque Works"
+      ],
+      "text": "[Activate: Main] [Once Per Turn] DON!! −4 (You may return the specified number of DON!! cards from your field to your DON!! deck.): Return up to 1 Character with a cost of 5 or less to the owner's hand.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST03",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-001.png"
+    },
+    {
+      "id": "ST03-002",
+      "name": "Edward Weevil",
+      "cardType": "Character",
+      "colors": [
+        "Blue"
+      ],
+      "cost": 3,
+      "power": 5000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Slash",
+      "subtypes": [
+        "The Seven Warlords of the Sea"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST03",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-002.png"
+    },
+    {
+      "id": "ST03-003",
+      "name": "Crocodile",
+      "cardType": "Character",
+      "colors": [
+        "Blue"
+      ],
+      "cost": 5,
+      "power": 6000,
+      "counter": null,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "The Seven Warlords of the Sea",
+        "Baroque Works"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[DON!! x1] [On Block] Place up to 1 Character with a cost of 2 or less at the bottom of the owner's deck.",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST03",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-003.png"
+    },
+    {
+      "id": "ST03-006",
+      "name": "Jinbe",
+      "cardType": "Character",
+      "colors": [
+        "Blue"
+      ],
+      "cost": 2,
+      "power": 4000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Fish-Man",
+        "The Seven Warlords of the Sea",
+        "The Sun Pirates"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST03",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-006.png"
+    },
+    {
+      "id": "ST03-008",
+      "name": "Trafalgar Law",
+      "cardType": "Character",
+      "colors": [
+        "Blue"
+      ],
+      "cost": 1,
+      "power": 1000,
+      "counter": null,
+      "life": null,
+      "attribute": "Slash",
+      "subtypes": [
+        "The Seven Warlords of the Sea",
+        "Heart Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST03",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-008.png"
+    },
+    {
+      "id": "ST03-013",
+      "name": "Boa Hancock",
+      "cardType": "Character",
+      "colors": [
+        "Blue"
+      ],
+      "cost": 3,
+      "power": 1000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "The Seven Warlords of the Sea",
+        "Kuja Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+      "triggerText": "[Trigger] Play this card.",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST03",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-013.png"
+    },
+    {
+      "id": "ST04-001",
+      "name": "Kaido",
+      "cardType": "Leader",
+      "colors": [
+        "Purple"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 5,
+      "attribute": "Strike",
+      "subtypes": [
+        "The Four Emperors",
+        "Animal Kingdom Pirates"
+      ],
+      "text": "[Activate: Main] [Once Per Turn] DON!! −7 (You may return the specified number of DON!! cards from your field to your DON!! deck.): Trash up to 1 of your opponent's Life cards.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-001.png"
+    },
+    {
+      "id": "ST04-004",
+      "name": "King",
+      "cardType": "Character",
+      "colors": [
+        "Purple"
+      ],
+      "cost": 6,
+      "power": 7000,
+      "counter": null,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "Animal Kingdom Pirates"
+      ],
+      "text": "[On Play] DON!! −1 (You may return the specified number of DON!! cards from your field to your DON!! deck.): K.O. up to 1 of your opponent's Characters with a cost of 4 or less.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-004.png"
+    },
+    {
+      "id": "ST04-005",
+      "name": "Queen",
+      "cardType": "Character",
+      "colors": [
+        "Purple"
+      ],
+      "cost": 5,
+      "power": 6000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal Kingdom Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On Play] DON!! −1 (You may return the specified number of DON!! cards from your field to your DON!! deck.): Draw 2 cards and trash 1 card from your hand.",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-005.png"
+    },
+    {
+      "id": "ST04-007",
+      "name": "Sheepshead",
+      "cardType": "Character",
+      "colors": [
+        "Purple"
+      ],
+      "cost": 2,
+      "power": 4000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Slash",
+      "subtypes": [
+        "Animal Kingdom Pirates",
+        "Smile"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-007.png"
+    },
+    {
+      "id": "ST04-008",
+      "name": "Jack",
+      "cardType": "Character",
+      "colors": [
+        "Purple"
+      ],
+      "cost": 3,
+      "power": 4000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal Kingdom Pirates"
+      ],
+      "text": "[On Play] You may trash 1 card from your hand: Add up to 1 DON!! card from your DON!! deck and set it as active.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-008.png"
+    },
+    {
+      "id": "ST04-009",
+      "name": "Ginrummy",
+      "cardType": "Character",
+      "colors": [
+        "Purple"
+      ],
+      "cost": 1,
+      "power": 3000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Strike",
+      "subtypes": [
+        "Animal Kingdom Pirates",
+        "Smile"
+      ],
+      "text": "",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST04",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-009.png"
+    },
+    {
+      "id": "ST07-001",
+      "name": "Charlotte Linlin",
+      "cardType": "Leader",
+      "colors": [
+        "Yellow"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 5,
+      "attribute": "Special",
+      "subtypes": [
+        "The Four Emperors",
+        "Big Mom Pirates"
+      ],
+      "text": "[DON!! x2] [When Attacking] You may add 1 card from the top or bottom of your Life cards to your hand: If you have 2 or less Life cards, add up to 1 card from your hand to the top of your Life cards.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST07",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST07-001.png"
+    },
+    {
+      "id": "ST07-007",
+      "name": "Charlotte Brulee",
+      "cardType": "Character",
+      "colors": [
+        "Yellow"
+      ],
+      "cost": 3,
+      "power": 1000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Special",
+      "subtypes": [
+        "Big Mom Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
+      "triggerText": "[Trigger] Play this card.",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST07",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST07-007.png"
+    },
+    {
+      "id": "ST10-001",
+      "name": "Trafalgar Law",
+      "cardType": "Leader",
+      "colors": [
+        "Red",
+        "Purple"
+      ],
+      "cost": null,
+      "power": 5000,
+      "counter": null,
+      "life": 4,
+      "attribute": "Slash",
+      "subtypes": [
+        "Heart Pirates"
+      ],
+      "text": "[Activate: Main] [Once Per Turn] DON!! −3 (You may return the specified number of DON!! cards from your field to your DON!! deck.): Place up to 1 of your opponent's Characters with 3000 power or less at the bottom of the owner's deck, and play up to 1 Character card with a cost of 4 or less from your hand.",
+      "triggerText": "",
+      "keywords": [],
+      "set": "ST10",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST10-001.png"
+    },
+    {
+      "id": "ST10-010",
+      "name": "Trafalgar Law",
+      "cardType": "Character",
+      "colors": [
+        "Purple"
+      ],
+      "cost": 4,
+      "power": 5000,
+      "counter": 1000,
+      "life": null,
+      "attribute": "Slash",
+      "subtypes": [
+        "Heart Pirates"
+      ],
+      "text": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On Play] DON!! −1 (You may return the specified number of DON!! cards from your field to your DON!! deck.): If your opponent has 7 or more cards in their hand, trash 2 cards from your opponent's hand.",
+      "triggerText": "",
+      "keywords": [
+        "Blocker"
+      ],
+      "set": "ST10",
+      "art": "https://en.onepiece-cardgame.com/images/cardlist/card/ST10-010.png"
+    }
+  ]
 }
