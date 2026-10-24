@@ -24,7 +24,7 @@ const Slot = ({ label, children }: { label: string; children?: React.ReactNode }
   <div className="min-w-0 [direction:ltr]">
     <div className="relative w-full">
       {children ?? (
-        <div className="zone-slot w-full aspect-[600/838]">{label}</div>
+        <div className="zone-slot w-full aspect-[600/838] opacity-30">{label}</div>
       )}
     </div>
     <ZoneLabel>{label}</ZoneLabel>
@@ -49,7 +49,7 @@ const DonCoins = ({ player }: { player: PlayerView }) => {
         <span
           key={d.donId}
           title={d.state === 'active' ? 'Active DON!!' : 'Rested DON!!'}
-          className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold sm:h-5 sm:w-5 sm:text-[10px] ${
+          className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold transition-all duration-200 sm:h-5 sm:w-5 sm:text-[10px] ${
             d.state === 'active'
               ? 'bg-gradient-to-br from-brass-300 to-brass-600 text-sea-950 shadow-[0_0_6px_rgba(227,187,95,0.6)]'
               : 'bg-brass-900 text-brass-700 ring-1 ring-brass-700/50'
@@ -111,7 +111,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ))}
           {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
-            <div key={i} className="zone-slot w-full aspect-[600/838]">CHAR</div>
+            <div key={i} className="zone-slot w-full aspect-[600/838] opacity-30">CHAR</div>
           ))}
         </div>
         <ZoneLabel>character area</ZoneLabel>
@@ -246,8 +246,8 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
               HAND
             </span>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {view.you.hand.map((c) => (
-                <Card key={c.instanceId} card={c} {...cardProps(c.instanceId)} />
+              {view.you.hand.map((c, i) => (
+                <Card key={c.instanceId} card={c} enterDelay={i * 70} {...cardProps(c.instanceId)} />
               ))}
             </div>
           </div>

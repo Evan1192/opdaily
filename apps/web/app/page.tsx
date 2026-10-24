@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ApiError, fetchState, fetchToday, sendAction, sendReset, sendUndo, setName, startSession } from '@/lib/api';
-import { playerId, recordWin, resetIdentity, saveName, savedName } from '@/lib/identity';
+import { markTutorialSeen, playerId, recordWin, resetIdentity, saveName, savedName, seenTutorial } from '@/lib/identity';
 import type { PuzzleInfo, SessionState } from '@/lib/types';
 import { Board } from '@/components/Board';
 import { ActionPanel } from '@/components/ActionPanel';
@@ -122,6 +122,66 @@ function Confetti() {
   );
 }
 
+/** First-visit walkthrough: three cards explaining the goal, the controls, and the constraint. */
+const TUTORIAL_STEPS = [
+  {
+    icon: '☠',
+    title: 'Sink the enemy leader',
+    body: 'Every day there is one puzzle: a board where lethal damage exists. Deal the final blow to the enemy leader to win.',
+  },
+  {
+    icon: '👆',
+    title: 'Tap glowing cards',
+    body: 'Cards with a green glow have legal moves. Tap one to see its orders — attack, attach DON!!, play from hand.',
+  },
+  {
+    icon: '⚡',
+    title: 'Every action counts',
+    body: 'You only get a few actions. Find the line that wins at par — undo freely, the sea forgives rehearsal.',
+  },
+];
+
+function Tutorial({ onDone }: { onDone: () => void }) {
+  const [step, setStep] = useState(0);
+  const s = TUTORIAL_STEPS[step]!;
+  const last = step === TUTORIAL_STEPS.length - 1;
+  return (
+    <div className="fixed inset-0 z-[70] flex animate-overlay-in items-center justify-center bg-sea-950/90 p-4">
+      <div className="w-full max-w-sm animate-poster-in rounded-2xl border border-brass-700/60 bg-sea-900 p-6 text-center shadow-[0_0_40px_rgba(201,155,63,0.2)]">
+        <div className="text-5xl">{s.icon}</div>
+        <h2 className="mt-3 font-display text-2xl tracking-wide text-brass-300">{s.title}</h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-300">{s.body}</p>
+        <div className="mt-4 flex items-center justify-center gap-1.5">
+          {TUTORIAL_STEPS.map((_, i) => (
+            <span
+              key={i}
+              className={`h-1.5 w-1.5 rounded-full ${i === step ? 'bg-brass-400' : 'bg-sea-700'}`}
+            />
+          ))}
+        </div>
+        <div className="mt-5 flex items-center justify-center gap-3">
+          {!last && (
+            <button
+              type="button"
+              onClick={onDone}
+              className="rounded-full px-4 py-2 text-sm text-slate-400 transition-colors hover:text-slate-200"
+            >
+              Skip
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => (last ? onDone() : setStep(step + 1))}
+            className="rounded-full bg-gradient-to-b from-brass-400 to-brass-600 px-6 py-2 text-sm font-bold text-sea-950 shadow-[0_2px_12px_rgba(201,155,63,0.35)] transition-all hover:-translate-y-0.5"
+          >
+            {last ? "Let's go ☠" : 'Next'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [puzzle, setPuzzle] = useState<PuzzleInfo | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -132,6 +192,7 @@ export default function Home() {
   const [nameSaved, setNameSaved] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(false);
   const startRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -145,6 +206,7 @@ export default function Home() {
         startRef.current = Date.now();
         setNameInput(savedName() ?? '');
         setNameSaved(savedName() !== null);
+        setShowTutorial(!seenTutorial());
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Failed to load');
       }
@@ -400,6 +462,17 @@ export default function Home() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* First-visit tutorial */}
+      {showTutorial && !done && (
+        <Tutorial
+          onDone={() => {
+            markTutorialSeen();
+            setShowTutorial(false);
+            startRef.current = Date.now(); // timer starts when they actually begin
+          }}
+        />
       )}
 
       {/* Win / lose payoff overlay */}

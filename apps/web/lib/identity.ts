@@ -25,6 +25,15 @@ export const saveName = (name: string): void => {
   localStorage.setItem(NAME_KEY, name);
 };
 
+// First-visit tutorial: shown once, then remembered.
+const TUTORIAL_KEY = 'opdaily:tutorial';
+
+export const seenTutorial = (): boolean => localStorage.getItem(TUTORIAL_KEY) !== null;
+
+export const markTutorialSeen = (): void => {
+  localStorage.setItem(TUTORIAL_KEY, '1');
+};
+
 // Daily win streak, tracked locally. Recording the same date twice is a no-op,
 // consecutive dates extend the streak, any gap resets it to 1.
 const STREAK_KEY = 'opdaily:streak';

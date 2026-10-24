@@ -13,10 +13,12 @@ interface Props {
   small?: boolean;
   /** Fill the parent's width — the playmat grid controls sizing. */
   fluid?: boolean;
+  /** Stagger the enter animation (ms) — used to "deal" hand cards one by one. */
+  enterDelay?: number;
 }
 
 /** A card: art when it loads, a text face as fallback. Rested cards rotate. */
-export function Card({ card, selected, dimmed, highlight, onClick, small, fluid }: Props) {
+export function Card({ card, selected, dimmed, highlight, onClick, small, fluid, enterDelay }: Props) {
   const [artFailed, setArtFailed] = useState(false);
   const width = fluid ? 'w-full' : small ? 'w-12 sm:w-16' : 'w-16 sm:w-20 md:w-24';
   return (
@@ -24,6 +26,7 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid 
       className={`group relative inline-block ${width} animate-card-enter ${
         card.state === 'rested' && !fluid ? 'mx-2 sm:mx-3' : ''
       }`}
+      style={enterDelay ? { animationDelay: `${enterDelay}ms`, animationFillMode: 'backwards' } : undefined}
     >
       <button
         type="button"
