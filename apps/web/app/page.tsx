@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ApiError, fetchState, fetchToday, sendAction, sendReset, sendUndo, setName, startSession } from '@/lib/api';
-import { playerId, saveName, savedName } from '@/lib/identity';
+import { playerId, resetIdentity, saveName, savedName } from '@/lib/identity';
 import type { PuzzleInfo, SessionState } from '@/lib/types';
 import { Board } from '@/components/Board';
 import { ActionPanel } from '@/components/ActionPanel';
@@ -370,6 +370,19 @@ export default function Home() {
                 </h2>
                 <Leaderboard puzzleId={puzzle.id} />
               </div>
+              {/* TESTING ONLY — new anonymous identity = fresh attempt. Remove before launch. */}
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetIdentity();
+                    window.location.reload();
+                  }}
+                  className="text-xs text-sea-600 underline decoration-dotted underline-offset-2 hover:text-slate-400"
+                >
+                  [test] redo puzzle as new player
+                </button>
+              </div>
             </div>
           ) : (
             <div className="my-8 w-full max-w-md animate-poster-in rounded-2xl border border-sea-600 bg-sea-900 p-6 sm:my-0">
@@ -397,6 +410,19 @@ export default function Home() {
                   BOUNTY BOARD
                 </h2>
                 <Leaderboard puzzleId={puzzle.id} />
+              </div>
+              {/* TESTING ONLY — new anonymous identity = fresh attempt. Remove before launch. */}
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    resetIdentity();
+                    window.location.reload();
+                  }}
+                  className="text-xs text-sea-600 underline decoration-dotted underline-offset-2 hover:text-slate-400"
+                >
+                  [test] redo puzzle as new player
+                </button>
               </div>
             </div>
           )}

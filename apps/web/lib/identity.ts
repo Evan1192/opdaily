@@ -15,6 +15,12 @@ export const playerId = (): string => {
 
 export const savedName = (): string | null => localStorage.getItem(NAME_KEY);
 
+// Testing only: drop the anonymous id so the server treats us as a new player,
+// granting a fresh attempt at today's puzzle. Remove before public launch.
+export const resetIdentity = (): void => {
+  localStorage.removeItem(KEY);
+};
+
 export const saveName = (name: string): void => {
   localStorage.setItem(NAME_KEY, name);
 };
