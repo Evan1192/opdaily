@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ApiError, fetchState, fetchToday, sendAction, sendReset, sendUndo, setName, startSession } from '@/lib/api';
-import { playerId, resetIdentity, saveName, savedName } from '@/lib/identity';
+import { playerId, recordWin, resetIdentity, saveName, savedName } from '@/lib/identity';
 import type { PuzzleInfo, SessionState } from '@/lib/types';
 import { Board } from '@/components/Board';
 import { ActionPanel } from '@/components/ActionPanel';
@@ -85,6 +85,43 @@ function FitScale({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Celebration burst behind the win poster: falling brass/crimson flecks and skulls. */
+const CONFETTI_GLYPHS = ['☠', '●', '◆', '★'];
+function Confetti() {
+  // Random layout generated once per mount — the overlay only mounts on win.
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: 36 }, (_, i) => ({
+        left: Math.random() * 100,
+        delay: Math.random() * 0.8,
+        duration: 2.2 + Math.random() * 1.6,
+        size: 10 + Math.random() * 14,
+        glyph: CONFETTI_GLYPHS[i % CONFETTI_GLYPHS.length],
+        color: i % 3 === 0 ? '#f0d48a' : i % 3 === 1 ? '#f26d6d' : '#e3bb5f',
+      })),
+    [],
+  );
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[55] overflow-hidden">
+      {pieces.map((p, i) => (
+        <span
+          key={i}
+          className="absolute -top-8 animate-confetti"
+          style={{
+            left: `${p.left}%`,
+            fontSize: p.size,
+            color: p.color,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+          }}
+        >
+          {p.glyph}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   const [puzzle, setPuzzle] = useState<PuzzleInfo | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -94,6 +131,7 @@ export default function Home() {
   const [name, setNameInput] = useState('');
   const [nameSaved, setNameSaved] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [streak, setStreak] = useState(0);
   const startRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -115,6 +153,11 @@ export default function Home() {
   }, []);
 
   const done = state?.won || state?.failed || state?.solved;
+
+  // Record the daily streak the moment today's puzzle is won.
+  useEffect(() => {
+    if (state?.won && puzzle) setStreak(recordWin(puzzle.date));
+  }, [state?.won, puzzle]);
 
   useEffect(() => {
     if (done) return;
@@ -276,6 +319,18 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Objective banner — tells a new player exactly what to do */}
+      {!done && (
+        <div className="mb-1 flex shrink-0 items-center justify-center gap-2 rounded-lg border border-brass-700/50 bg-sea-900/80 px-3 py-1.5 text-center">
+          <span className="font-display text-sm tracking-wide text-brass-300 sm:text-base">
+            ☠ Take down the enemy leader
+          </span>
+          <span className="rounded-full bg-sea-800 px-2.5 py-0.5 text-xs font-semibold text-slate-200 ring-1 ring-sea-600">
+            {state.maxActions - state.actionsSpent} action{state.maxActions - state.actionsSpent === 1 ? '' : 's'} left
+          </span>
+        </div>
+      )}
+
       {/* Error toast */}
       {error && (
         <div className="fixed left-1/2 top-4 z-[60] -translate-x-1/2 animate-overlay-in rounded-lg bg-bounty-900 px-4 py-2 text-sm text-red-100 shadow-glow-combat ring-1 ring-bounty-600">
@@ -284,7 +339,7 @@ export default function Home() {
       )}
 
       {/* Board — scaled to fit the remaining viewport space, never scrolls */}
-      <div className="min-h-0 flex-1">
+      <div className="relative min-h-0 flex-1">
         <FitScale>
           <Board
             view={state.view}
@@ -294,6 +349,14 @@ export default function Home() {
             onCard={onCard}
           />
         </FitScale>
+        {/* Nudge hint floats just above your side of the board, next to the glowing cards */}
+        {!done && !selected && !state.pending && actionable.size > 0 && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center">
+            <span className="animate-bounce-soft rounded-full bg-emerald-900/90 px-3 py-1 text-xs font-semibold text-emerald-200 shadow-glow-target ring-1 ring-emerald-500">
+              👆 Tap a glowing card to act
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Command bar — pinned bottom */}
@@ -308,34 +371,30 @@ export default function Home() {
                 onChoice={(choice) => void apply({ choice })}
                 onCancel={() => setSelected(null)}
               />
-              {selectedActions.length === 0 && !state.pending && (
-                <span className="text-xs text-sea-600">
-                  Tap a glowing card to see its orders.
-                </span>
-              )}
+
             </div>
             <div className="ml-auto flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => void undo()}
-                className="rounded-lg bg-sea-800 px-3 py-1.5 text-sm text-slate-300 ring-1 ring-sea-600 transition-colors hover:bg-sea-700"
+                className="rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
               >
-                Undo
+                ↩ Undo
               </button>
               <button
                 type="button"
                 onClick={() => void reset()}
-                className="rounded-lg bg-sea-800 px-3 py-1.5 text-sm text-slate-300 ring-1 ring-sea-600 transition-colors hover:bg-sea-700"
+                className="rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
               >
-                Reset
+                ⟳ Reset
               </button>
               {endTurnAction && (
                 <button
                   type="button"
                   onClick={() => void apply({ key: 'endTurn' })}
-                  className="rounded-lg bg-bounty-700 px-3 py-1.5 text-sm font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600"
+                  className="rounded-full bg-gradient-to-b from-bounty-500 to-bounty-700 px-5 py-2 text-sm font-bold text-white shadow-[0_2px_12px_rgba(220,59,59,0.4)] ring-1 ring-bounty-400 transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(220,59,59,0.55)]"
                 >
-                  ⏭ End turn
+                  End turn ⏭
                 </button>
               )}
             </div>
@@ -346,10 +405,16 @@ export default function Home() {
       {/* Win / lose payoff overlay */}
       {done && (
         <div className="fixed inset-0 z-50 flex animate-overlay-in items-start justify-center overflow-y-auto bg-sea-950/90 p-4 sm:items-center">
+          {state.won && <Confetti />}
           {state.won ? (
-            <div className="my-8 w-full max-w-lg animate-poster-in rounded-2xl border-2 border-brass-600 bg-sea-900 p-6 shadow-[0_0_60px_rgba(201,155,63,0.25)] sm:my-0">
+            <div className="relative z-[56] my-8 w-full max-w-lg animate-poster-in rounded-2xl border-2 border-brass-600 bg-sea-900 p-6 shadow-[0_0_60px_rgba(201,155,63,0.25)] sm:my-0">
               <div className="text-center">
                 <div className="font-display text-6xl tracking-wider text-brass-300">LETHAL.</div>
+                {streak > 0 && (
+                  <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-sea-800 px-3 py-0.5 text-sm font-semibold text-brass-300 ring-1 ring-brass-700/60">
+                    🔥 {streak}-day streak
+                  </div>
+                )}
                 <div className="mt-2 text-sm text-slate-300">
                   {atPar ? (
                     <span className="text-brass-400">👑 Bounty claimed at par — {state.par} actions.</span>

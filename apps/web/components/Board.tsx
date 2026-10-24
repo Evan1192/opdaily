@@ -193,7 +193,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
   return (
     <div className="flex flex-col gap-2">
       {/* Opponent seat, rotated to face you across the table */}
-      <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-sea-700 sm:p-3">
+      <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-brass-700/50 sm:p-3">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-display text-xs tracking-widest text-bounty-400">OPPONENT</span>
           {view.opponent.hand !== null ? (
@@ -235,7 +235,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
 
       {/* Your seat */}
-      <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-sea-700 sm:p-3">
+      <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-brass-600/60 sm:p-3">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-display text-xs tracking-widest text-brass-400">YOUR BOARD</span>
         </div>

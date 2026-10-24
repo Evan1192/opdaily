@@ -5,14 +5,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Deep-sea navy base. Darker than slate, slightly blue-shifted.
+        // Sea navy base — lifted from near-black so the app reads warm, not grim.
         sea: {
-          950: '#060a14',
-          900: '#0a1022',
-          850: '#0e1630',
-          800: '#141e3c',
-          700: '#1d2a52',
-          600: '#2a3a6b',
+          950: '#0a1124',
+          900: '#121c3a',
+          850: '#18244c',
+          800: '#203060',
+          700: '#2e4280',
+          600: '#4a5e96',
         },
         // Brass / gold chrome and DON!!.
         brass: {
@@ -44,8 +44,8 @@ const config: Config = {
       },
       keyframes: {
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 8px 1px rgba(52, 211, 153, 0.35)' },
-          '50%': { boxShadow: '0 0 16px 4px rgba(52, 211, 153, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 10px 2px rgba(52, 211, 153, 0.5)', transform: 'scale(1)' },
+          '50%': { boxShadow: '0 0 22px 7px rgba(52, 211, 153, 0.85)', transform: 'scale(1.03)' },
         },
         'card-enter': {
           '0%': { opacity: '0', transform: 'translateY(8px) scale(0.96)' },
@@ -66,6 +66,14 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'scale(0.92) rotate(-1deg)' },
           '100%': { opacity: '1', transform: 'scale(1) rotate(0deg)' },
         },
+        confetti: {
+          '0%': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
+          '100%': { transform: 'translateY(110vh) rotate(540deg)', opacity: '0.3' },
+        },
+        'bounce-soft': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-4px)' },
+        },
       },
       animation: {
         'pulse-glow': 'pulse-glow 1.6s ease-in-out infinite',
@@ -73,6 +81,8 @@ const config: Config = {
         'attack-shake': 'attack-shake 0.4s ease-in-out',
         'overlay-in': 'overlay-in 0.25s ease-out both',
         'poster-in': 'poster-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both',
+        confetti: 'confetti 3s linear both',
+        'bounce-soft': 'bounce-soft 1.4s ease-in-out infinite',
       },
     },
   },

@@ -24,3 +24,23 @@ export const resetIdentity = (): void => {
 export const saveName = (name: string): void => {
   localStorage.setItem(NAME_KEY, name);
 };
+
+// Daily win streak, tracked locally. Recording the same date twice is a no-op,
+// consecutive dates extend the streak, any gap resets it to 1.
+const STREAK_KEY = 'opdaily:streak';
+
+export const recordWin = (date: string): number => {
+  let prev: { count: number; lastDate: string } | null = null;
+  try {
+    prev = JSON.parse(localStorage.getItem(STREAK_KEY) ?? 'null');
+  } catch {
+    prev = null;
+  }
+  if (prev && prev.lastDate === date) return prev.count;
+  const yesterday = new Date(`${date}T00:00:00Z`);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const isConsecutive = prev?.lastDate === yesterday.toISOString().slice(0, 10);
+  const count = isConsecutive ? prev!.count + 1 : 1;
+  localStorage.setItem(STREAK_KEY, JSON.stringify({ count, lastDate: date }));
+  return count;
+};
