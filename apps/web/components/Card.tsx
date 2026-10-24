@@ -11,16 +11,18 @@ interface Props {
   highlight?: boolean;
   onClick?: () => void;
   small?: boolean;
+  /** Fill the parent's width — the playmat grid controls sizing. */
+  fluid?: boolean;
 }
 
 /** A card: art when it loads, a text face as fallback. Rested cards rotate. */
-export function Card({ card, selected, dimmed, highlight, onClick, small }: Props) {
+export function Card({ card, selected, dimmed, highlight, onClick, small, fluid }: Props) {
   const [artFailed, setArtFailed] = useState(false);
-  const width = small ? 'w-12 sm:w-16' : 'w-16 sm:w-20 md:w-24';
+  const width = fluid ? 'w-full' : small ? 'w-12 sm:w-16' : 'w-16 sm:w-20 md:w-24';
   return (
     <span
       className={`group relative inline-block ${width} animate-card-enter ${
-        card.state === 'rested' ? 'mx-2 sm:mx-3' : ''
+        card.state === 'rested' && !fluid ? 'mx-2 sm:mx-3' : ''
       }`}
     >
       <button
@@ -30,7 +32,8 @@ export function Card({ card, selected, dimmed, highlight, onClick, small }: Prop
         className={[
           'relative block w-full aspect-[600/838] rounded-md overflow-hidden text-left',
           'transition-all duration-200',
-          card.state === 'rested' ? 'rotate-90' : '',
+          // Fluid cards live in fixed grid cells, so shrink the rotation to fit the cell.
+          card.state === 'rested' ? (fluid ? 'rotate-90 scale-[0.716]' : 'rotate-90') : '',
           selected
             ? 'ring-2 ring-brass-400 shadow-glow-selected -translate-y-1'
             : highlight
@@ -98,11 +101,19 @@ export function Card({ card, selected, dimmed, highlight, onClick, small }: Prop
 }
 
 /** A face-down card back (hidden life, opponent hand count). */
-export function CardBack({ small, sideways }: { small?: boolean; sideways?: boolean }) {
+export function CardBack({
+  small,
+  sideways,
+  fluid,
+}: {
+  small?: boolean;
+  sideways?: boolean;
+  fluid?: boolean;
+}) {
   return (
     <div
       className={[
-        small ? 'w-10' : 'w-12 sm:w-16',
+        fluid ? 'w-full' : small ? 'w-10' : 'w-12 sm:w-16',
         sideways ? 'rotate-90' : '',
         'aspect-[600/838] rounded-md ring-1 ring-sea-600',
         'bg-[radial-gradient(circle_at_50%_40%,#7d1f1f,#2a0d0d_70%)]',

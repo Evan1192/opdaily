@@ -12,25 +12,44 @@ interface Props {
   onCard: (instanceId: string) => void;
 }
 
-/** Width classes matching Card so empty slots line up with filled ones. */
-const SLOT_W = 'w-16 sm:w-20 md:w-24';
-const SLOT_W_SMALL = 'w-12 sm:w-16';
-
-const EmptySlot = ({ label, small }: { label: string; small?: boolean }) => (
-  <div className={`zone-slot aspect-[600/838] ${small ? SLOT_W_SMALL : SLOT_W}`}>{label}</div>
+/** Label shown along the top edge of a zone. */
+const ZoneLabel = ({ children }: { children: React.ReactNode }) => (
+  <span className="block truncate text-center font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
+    {children}
+  </span>
 );
 
-/** Gold DON!! coins: active bright brass, rested dim; deck count as a stack. */
-const DonRow = ({ player }: { player: PlayerView }) => {
+/** A single-card zone cell: fixed card aspect so the mat keeps its proportions. */
+const Slot = ({ label, children }: { label: string; children?: React.ReactNode }) => (
+  <div className="min-w-0 [direction:ltr]">
+    <div className="relative w-full">
+      {children ?? (
+        <div className="zone-slot w-full aspect-[600/838]">{label}</div>
+      )}
+    </div>
+    <ZoneLabel>{label}</ZoneLabel>
+  </div>
+);
+
+const CountBadge = ({ n }: { n: number }) => (
+  <span className="absolute -bottom-1 -right-1 z-10 rounded-full bg-sea-950 px-1.5 text-[10px] font-bold tabular-nums text-slate-300 ring-1 ring-sea-600">
+    {n}
+  </span>
+);
+
+/** Gold DON!! coins living in the cost area: active bright brass, rested dim. */
+const DonCoins = ({ player }: { player: PlayerView }) => {
   const unattached = player.don.filter((d) => !d.attachedTo);
+  if (unattached.length === 0) {
+    return <span className="text-[10px] text-sea-600">no DON!!</span>;
+  }
   return (
-    <div className="flex items-center gap-1.5">
-      <span className="font-display text-xs tracking-wider text-brass-500">DON!!</span>
+    <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5">
       {unattached.map((d) => (
         <span
           key={d.donId}
           title={d.state === 'active' ? 'Active DON!!' : 'Rested DON!!'}
-          className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+          className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold sm:h-5 sm:w-5 sm:text-[10px] ${
             d.state === 'active'
               ? 'bg-gradient-to-br from-brass-300 to-brass-600 text-sea-950 shadow-[0_0_6px_rgba(227,187,95,0.6)]'
               : 'bg-brass-900 text-brass-700 ring-1 ring-brass-700/50'
@@ -39,65 +58,31 @@ const DonRow = ({ player }: { player: PlayerView }) => {
           ●
         </span>
       ))}
-      {unattached.length === 0 && <span className="text-[10px] text-sea-600">none</span>}
-      {player.donDeckCount > 0 && (
-        <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-sea-800 px-1.5 py-px text-[10px] text-brass-500 ring-1 ring-sea-600">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-brass-700" />
-          ×{player.donDeckCount}
-        </span>
-      )}
     </div>
   );
 };
 
 /** Life as a sideways stack on the mat edge, like the physical game. */
 const LifeStack = ({ player }: { player: PlayerView }) => (
-  <div className="flex shrink-0 flex-col items-center gap-1">
-    <span className="font-display text-[10px] tracking-widest text-brass-500">
+  <div className="flex w-[11%] shrink-0 flex-col items-center gap-1 [direction:ltr]">
+    <span className="font-display text-[8px] tracking-widest text-brass-500 sm:text-[10px]">
       LIFE {player.life.length}
     </span>
     {player.life.length === 0 ? (
-      <div className="zone-slot h-10 w-12 sm:h-12 sm:w-14 !border-bounty-600/60 !text-bounty-500">
-        0
-      </div>
+      <div className="zone-slot aspect-[838/600] w-full !border-bounty-600/60 !text-bounty-500">0</div>
     ) : (
-      <div className="flex flex-col -space-y-8 sm:-space-y-10">
-        {player.life.map((card, i) =>
-          card ? (
-            <span key={card.instanceId} className="rotate-90 scale-90">
-              <Card card={card} small />
-            </span>
-          ) : (
-            <CardBack key={i} small sideways />
-          ),
-        )}
+      <div className="flex w-full flex-col gap-0.5">
+        {player.life.map((card, i) => (
+          <div key={card ? card.instanceId : i} className="relative w-full aspect-[838/600] overflow-hidden rounded-md">
+            <div className="absolute left-1/2 top-1/2 w-[71.6%] -translate-x-1/2 -translate-y-1/2 rotate-90">
+              {card ? <Card card={card} fluid /> : <CardBack fluid />}
+            </div>
+          </div>
+        ))}
       </div>
     )}
   </div>
 );
-
-/** Deck + trash piles on the right edge of the mat. */
-const Piles = ({ player }: { player: PlayerView }) => {
-  const top = player.trash[player.trash.length - 1];
-  return (
-    <div className="flex shrink-0 flex-col items-center gap-2">
-      <div className="relative">
-        {player.deckCount > 0 ? <CardBack small /> : <EmptySlot label="DECK" small />}
-        <span className="absolute -bottom-1 -right-1 rounded-full bg-sea-950 px-1.5 text-[10px] font-bold tabular-nums text-slate-300 ring-1 ring-sea-600">
-          {player.deckCount}
-        </span>
-      </div>
-      <div className="relative">
-        {top ? <Card card={top} small /> : <EmptySlot label="TRASH" small />}
-        {player.trash.length > 0 && (
-          <span className="absolute -bottom-1 -right-1 rounded-full bg-sea-950 px-1.5 text-[10px] font-bold tabular-nums text-slate-300 ring-1 ring-sea-600">
-            {player.trash.length}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-};
 
 export function Board({ view, selected, targets, actionable, onCard }: Props) {
   const cardProps = (instanceId: string) => ({
@@ -108,50 +93,106 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       : undefined,
   });
 
-  const charSlots = (player: PlayerView, interactive: boolean) => (
-    <div className="flex gap-1.5 sm:gap-2">
-      {player.characters.map((c) => (
-        <Card key={c.instanceId} card={c} {...(interactive ? cardProps(c.instanceId) : {})} />
-      ))}
-      {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
-        <EmptySlot key={i} label="CHAR" />
-      ))}
-    </div>
-  );
+  /**
+   * One player's seat, laid out like the official playmat:
+   *   row 1 — CHARACTER AREA (full width, 5 slots)
+   *   row 2 — [phases/space] LEADER · STAGE · [space] · DECK
+   *   row 3 — DON!! DECK · COST AREA · TRASH
+   * with LIFE sideways along the edge. `flipped` renders the opponent's seat
+   * rotated 180° (rows and columns reversed, life on the far side).
+   */
+  const mat = (player: PlayerView, interactive: boolean, flipped: boolean) => {
+    const charArea = (
+      <div className="rounded-lg border border-sea-600/60 p-1 sm:p-1.5 [direction:ltr]">
+        <div className="grid grid-cols-5 gap-1 sm:gap-2">
+          {player.characters.map((c) => (
+            <div key={c.instanceId} className="min-w-0">
+              <Card card={c} fluid {...(interactive ? cardProps(c.instanceId) : {})} />
+            </div>
+          ))}
+          {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
+            <div key={i} className="zone-slot w-full aspect-[600/838]">CHAR</div>
+          ))}
+        </div>
+        <ZoneLabel>character area</ZoneLabel>
+      </div>
+    );
 
-  const mat = (player: PlayerView, interactive: boolean) => (
-    <div className="flex items-start gap-2 sm:gap-4">
-      <LifeStack player={player} />
-      <div className="flex flex-col gap-2">
-        <div className="flex items-start gap-1.5 sm:gap-2">
-          <div className="flex flex-col items-center gap-0.5">
-            <Card card={player.leader} {...(interactive ? cardProps(player.leader.instanceId) : {})} />
-            <span className="font-display text-[9px] tracking-widest text-sea-600">LEADER</span>
+    const midRow = (
+      <div className={`grid grid-cols-6 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
+        <div className="col-span-2" />
+        <Slot label="leader">
+          <Card
+            card={player.leader}
+            fluid
+            {...(interactive ? cardProps(player.leader.instanceId) : {})}
+          />
+        </Slot>
+        <Slot label="stage">
+          {player.stage ? (
+            <Card
+              card={player.stage}
+              fluid
+              {...(interactive ? cardProps(player.stage.instanceId) : {})}
+            />
+          ) : undefined}
+        </Slot>
+        <div />
+        <Slot label="deck">
+          {player.deckCount > 0 ? (
+            <div className="relative">
+              <CardBack fluid />
+              <CountBadge n={player.deckCount} />
+            </div>
+          ) : undefined}
+        </Slot>
+      </div>
+    );
+
+    const topTrash = player.trash[player.trash.length - 1];
+    const bottomRow = (
+      <div className={`grid grid-cols-6 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
+        <Slot label="don!! deck">
+          {player.donDeckCount > 0 ? (
+            <div className="relative">
+              <CardBack fluid />
+              <CountBadge n={player.donDeckCount} />
+            </div>
+          ) : undefined}
+        </Slot>
+        <div className="col-span-4 self-stretch [direction:ltr]">
+          <div className="flex min-h-full flex-col justify-center rounded-lg border border-sea-600/60 p-1.5 sm:p-2">
+            <DonCoins player={player} />
           </div>
-          <div className="flex flex-col items-center gap-0.5">
-            {player.stage ? (
-              <Card
-                card={player.stage}
-                {...(interactive ? cardProps(player.stage.instanceId) : {})}
-              />
-            ) : (
-              <EmptySlot label="STAGE" />
-            )}
-            <span className="font-display text-[9px] tracking-widest text-sea-600">STAGE</span>
-          </div>
-          <div className="hidden sm:block sm:w-2" />
-          {charSlots(player, interactive)}
+          <ZoneLabel>cost area</ZoneLabel>
+        </div>
+        <Slot label="trash">
+          {topTrash ? (
+            <div className="relative">
+              <Card card={topTrash} fluid />
+              <CountBadge n={player.trash.length} />
+            </div>
+          ) : undefined}
+        </Slot>
+      </div>
+    );
+
+    const rows = flipped ? [bottomRow, midRow, charArea] : [charArea, midRow, bottomRow];
+    return (
+      <div className={`flex gap-1.5 sm:gap-2 ${flipped ? 'flex-row-reverse' : ''}`}>
+        <LifeStack player={player} />
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:gap-2">
+          {rows.map((row, i) => (
+            <div key={i}>{row}</div>
+          ))}
         </div>
       </div>
-      <div className="ml-auto">
-        <Piles player={player} />
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="flex flex-col gap-2">
-      {/* Opponent mat (mirrored above) */}
+      {/* Opponent seat, rotated to face you across the table */}
       <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-sea-700 sm:p-3">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-display text-xs tracking-widest text-bounty-400">OPPONENT</span>
@@ -177,10 +218,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             ))}
           </div>
         )}
-        {mat(view.opponent, true)}
-        <div className="mt-2">
-          <DonRow player={view.opponent} />
-        </div>
+        {mat(view.opponent, true, true)}
       </section>
 
       {/* Center divider — combat banner slots in when an attack is live. */}
@@ -196,13 +234,12 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
         )}
       </div>
 
-      {/* Your mat */}
+      {/* Your seat */}
       <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-sea-700 sm:p-3">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-display text-xs tracking-widest text-brass-400">YOUR BOARD</span>
-          <DonRow player={view.you} />
         </div>
-        {mat(view.you, true)}
+        {mat(view.you, true, false)}
         {view.you.hand && view.you.hand.length > 0 && (
           <div className="mt-3 border-t border-sea-700 pt-2">
             <span className="mb-1 block font-display text-[10px] tracking-widest text-brass-500">
