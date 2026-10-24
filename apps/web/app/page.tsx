@@ -368,15 +368,28 @@ export default function Home() {
             {puzzle.flavor && <span className="text-xs italic text-sea-600">{puzzle.flavor}</span>}
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-lg font-bold tabular-nums">
-            <span className={state.actionsSpent > state.par ? 'text-bounty-400' : 'text-brass-300'}>
-              {state.actionsSpent}
+        <div className="flex flex-col items-end gap-0.5">
+          {/* Action pips — one per allowed action, filled as they are spent */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Actions
             </span>
-            <span className="text-sm font-normal text-slate-500"> / par {state.par}</span>
+            <div className="flex gap-1">
+              {Array.from({ length: state.maxActions }, (_, i) => (
+                <span
+                  key={i}
+                  className={`h-2.5 w-2.5 rounded-full transition-colors duration-200 ${
+                    i < state.actionsSpent
+                      ? 'bg-brass-400 shadow-[0_0_6px_rgba(227,187,95,0.6)]'
+                      : 'bg-sea-800 ring-1 ring-sea-600'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-[10px] text-slate-500">par {state.par}</span>
           </div>
           {!done && (
-            <div className="font-mono text-xs tabular-nums text-slate-500">{fmtClock(elapsed)}</div>
+            <div className="font-mono text-[10px] tabular-nums text-slate-600">{fmtClock(elapsed)}</div>
           )}
         </div>
       </header>

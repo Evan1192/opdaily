@@ -245,10 +245,24 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             <span className="mb-1 block font-display text-[10px] tracking-widest text-brass-500">
               HAND
             </span>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {view.you.hand.map((c, i) => (
-                <Card key={c.instanceId} card={c} enterDelay={i * 70} {...cardProps(c.instanceId)} />
-              ))}
+            {/* Fanned arc — center card highest, edges rotate outward and dip */}
+            <div className="flex justify-center pb-5 pt-1">
+              {view.you.hand.map((c, i, arr) => {
+                const off = i - (arr.length - 1) / 2;
+                return (
+                  <div
+                    key={c.instanceId}
+                    className="relative -ml-5 transition-transform duration-200 first:ml-0 hover:z-20 sm:-ml-7"
+                    style={{
+                      transform: `rotate(${off * 5}deg) translateY(${Math.abs(off) * 7}px)`,
+                      transformOrigin: 'bottom center',
+                      zIndex: i,
+                    }}
+                  >
+                    <Card card={c} enterDelay={i * 70} {...cardProps(c.instanceId)} />
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
