@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { artUrl, type CardView } from '@/lib/types';
 
@@ -32,11 +33,14 @@ export function Card({ card, selected, dimmed, highlight, onClick, small }: Prop
       title={`${card.name}${card.power !== null ? ` — ${card.power}` : ''}`}
     >
       {!artFailed ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        // The art host sends Cross-Origin-Resource-Policy: same-site, which blocks
+        // direct <img> hotlinking — Next's image optimizer fetches it server-side.
+        <Image
           src={artUrl(card.definitionId)}
           alt={card.name}
-          className="h-full w-full object-cover"
+          fill
+          sizes={small ? '64px' : '96px'}
+          className="object-cover"
           onError={() => setArtFailed(true)}
         />
       ) : (
