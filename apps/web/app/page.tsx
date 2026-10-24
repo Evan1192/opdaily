@@ -52,6 +52,39 @@ const fmtClock = (ms: number): string => {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 };
 
+/**
+ * Renders children at a fixed design width and scales them down (never up)
+ * so the whole board always fits inside the available space — no scrolling.
+ */
+const DESIGN_W = 896; // px — matches max-w-4xl
+function FitScale({ children }: { children: React.ReactNode }) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const measure = () => {
+      const outer = outerRef.current;
+      const inner = innerRef.current;
+      if (!outer || !inner) return;
+      setScale(Math.min(outer.clientWidth / DESIGN_W, outer.clientHeight / inner.offsetHeight, 1));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (outerRef.current) ro.observe(outerRef.current);
+    if (innerRef.current) ro.observe(innerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div ref={outerRef} className="flex h-full w-full items-center justify-center overflow-hidden">
+      <div ref={innerRef} className="shrink-0" style={{ width: DESIGN_W, transform: `scale(${scale})` }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [puzzle, setPuzzle] = useState<PuzzleInfo | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -211,9 +244,9 @@ export default function Home() {
         : 'bg-bounty-900/60 text-bounty-400 ring-bounty-700';
 
   return (
-    <main className="mx-auto max-w-4xl p-3 pb-24 sm:p-4 sm:pb-24">
+    <main className="mx-auto flex h-full max-w-4xl flex-col px-3 pt-2 sm:px-4">
       {/* Top bar */}
-      <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <header className="mb-1 flex shrink-0 flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-3">
           <h1 className="font-display text-3xl tracking-wide text-brass-300">
             ☠ OPDaily
@@ -250,17 +283,22 @@ export default function Home() {
         </div>
       )}
 
-      <Board
-        view={state.view}
-        selected={selected}
-        targets={targets}
-        actionable={done ? new Set() : actionable}
-        onCard={onCard}
-      />
+      {/* Board — scaled to fit the remaining viewport space, never scrolls */}
+      <div className="min-h-0 flex-1">
+        <FitScale>
+          <Board
+            view={state.view}
+            selected={selected}
+            targets={targets}
+            actionable={done ? new Set() : actionable}
+            onCard={onCard}
+          />
+        </FitScale>
+      </div>
 
-      {/* Command bar — sticky bottom */}
+      {/* Command bar — pinned bottom */}
       {!done && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-sea-700 bg-sea-950/95 backdrop-blur">
+        <div className="z-40 -mx-3 shrink-0 border-t border-sea-700 bg-sea-950/95 backdrop-blur sm:-mx-4">
           <div className="mx-auto flex max-w-4xl flex-wrap items-center gap-2 p-2 sm:p-3">
             <div className="min-w-0 flex-1">
               <ActionPanel
