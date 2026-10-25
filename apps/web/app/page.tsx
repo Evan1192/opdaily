@@ -349,62 +349,104 @@ export default function Home() {
         : 'bg-bounty-900/60 text-bounty-400 ring-bounty-700';
 
   return (
-    <main className="mx-auto flex h-full max-w-6xl flex-col px-3 pt-2 sm:px-4">
-      {/* Top bar */}
-      <header className="mb-1 flex shrink-0 flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-3">
-          <h1 className="font-display text-3xl tracking-wide text-brass-300">
-            ☠ OPDaily
-          </h1>
-          <div className="flex flex-col">
-            <span className="flex items-center gap-2 text-sm text-slate-300">
-              {puzzle.date} · {puzzle.title}
-              <span
-                className={`rounded-full px-2 py-px text-[10px] font-semibold uppercase tracking-wide ring-1 ${diffBadge}`}
-              >
-                {puzzle.difficulty}
-              </span>
+    // All chrome lives in a left sidebar so the board gets the full viewport
+    // height — FitScale is height-bound, so every horizontal band above or
+    // below the board shrinks every card on it.
+    <main className="flex h-full flex-row gap-2 px-2 py-2 sm:px-3">
+      {/* Sidebar — title, status, and commands */}
+      <aside className="flex w-52 shrink-0 flex-col gap-2 overflow-y-auto sm:w-60">
+        <div>
+          <h1 className="font-display text-2xl tracking-wide text-brass-300">☠ OPDaily</h1>
+          <span className="flex flex-wrap items-center gap-1.5 text-xs text-slate-300">
+            {puzzle.date} · {puzzle.title}
+            <span
+              className={`rounded-full px-2 py-px text-[10px] font-semibold uppercase tracking-wide ring-1 ${diffBadge}`}
+            >
+              {puzzle.difficulty}
             </span>
-            {puzzle.flavor && <span className="text-xs italic text-sea-600">{puzzle.flavor}</span>}
-          </div>
+          </span>
+          {puzzle.flavor && <span className="text-xs italic text-sea-600">{puzzle.flavor}</span>}
         </div>
-        <div className="flex flex-col items-end gap-0.5">
-          {/* Action pips — one per allowed action, filled as they are spent */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              Actions
-            </span>
-            <div className="flex gap-1">
-              {Array.from({ length: state.maxActions }, (_, i) => (
-                <span
-                  key={i}
-                  className={`h-2.5 w-2.5 rounded-full transition-colors duration-200 ${
-                    i < state.actionsSpent
-                      ? 'bg-brass-400 shadow-[0_0_6px_rgba(227,187,95,0.6)]'
-                      : 'bg-sea-800 ring-1 ring-sea-600'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-[10px] text-slate-500">par {state.par}</span>
+
+        {/* Action pips — one per allowed action, filled as they are spent */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            Actions
+          </span>
+          <div className="flex gap-1">
+            {Array.from({ length: state.maxActions }, (_, i) => (
+              <span
+                key={i}
+                className={`h-2.5 w-2.5 rounded-full transition-colors duration-200 ${
+                  i < state.actionsSpent
+                    ? 'bg-brass-400 shadow-[0_0_6px_rgba(227,187,95,0.6)]'
+                    : 'bg-sea-800 ring-1 ring-sea-600'
+                }`}
+              />
+            ))}
           </div>
+          <span className="text-[10px] text-slate-500">par {state.par}</span>
           {!done && (
-            <div className="font-mono text-[10px] tabular-nums text-slate-600">{fmtClock(elapsed)}</div>
+            <span className="ml-auto font-mono text-[10px] tabular-nums text-slate-600">
+              {fmtClock(elapsed)}
+            </span>
           )}
         </div>
-      </header>
 
-      {/* Objective banner — tells a new player exactly what to do */}
-      {!done && (
-        <div className="mb-1 flex shrink-0 items-center justify-center gap-2 rounded-lg border border-brass-700/50 bg-sea-900/80 px-3 py-1.5 text-center">
-          <span className="font-display text-sm tracking-wide text-brass-300 sm:text-base">
-            ☠ Take down the enemy leader
-          </span>
-          <span className="rounded-full bg-sea-800 px-2.5 py-0.5 text-xs font-semibold text-slate-200 ring-1 ring-sea-600">
-            {state.maxActions - state.actionsSpent} action{state.maxActions - state.actionsSpent === 1 ? '' : 's'} left
-          </span>
-        </div>
-      )}
+        {/* Objective — tells a new player exactly what to do */}
+        {!done && (
+          <div className="rounded-lg border border-brass-700/50 bg-sea-900/80 px-3 py-2 text-center">
+            <div className="font-display text-sm tracking-wide text-brass-300">
+              ☠ Take down the enemy leader
+            </div>
+            <span className="mt-1 inline-block rounded-full bg-sea-800 px-2.5 py-0.5 text-xs font-semibold text-slate-200 ring-1 ring-sea-600">
+              {state.maxActions - state.actionsSpent} action{state.maxActions - state.actionsSpent === 1 ? '' : 's'} left
+            </span>
+          </div>
+        )}
+
+        {/* Orders for the selected card */}
+        {!done && (
+          <ActionPanel
+            choices={selectedActions.map((a) => ({ key: a.key, label: describe(a.key, names) }))}
+            pending={state.pending}
+            onAction={(key) => void apply({ key })}
+            onChoice={(choice) => void apply({ choice })}
+            onCancel={() => setSelected(null)}
+          />
+        )}
+
+        {/* Commands pinned to the sidebar bottom */}
+        {!done && (
+          <div className="mt-auto flex flex-col gap-2 pt-2">
+            {endTurnAction && (
+              <button
+                type="button"
+                onClick={() => void apply({ key: 'endTurn' })}
+                className="rounded-full bg-gradient-to-b from-bounty-500 to-bounty-700 px-5 py-2 text-sm font-bold text-white shadow-[0_2px_12px_rgba(220,59,59,0.4)] ring-1 ring-bounty-400 transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(220,59,59,0.55)]"
+              >
+                End turn ⏭
+              </button>
+            )}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => void undo()}
+                className="flex-1 rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
+              >
+                ↩ Undo
+              </button>
+              <button
+                type="button"
+                onClick={() => void reset()}
+                className="flex-1 rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
+              >
+                ⟳ Reset
+              </button>
+            </div>
+          </div>
+        )}
+      </aside>
 
       {/* Error toast */}
       {error && (
@@ -414,7 +456,7 @@ export default function Home() {
       )}
 
       {/* Board — scaled to fit the remaining viewport space, never scrolls */}
-      <div className="relative min-h-0 flex-1">
+      <div className="relative min-h-0 min-w-0 flex-1">
         <FitScale>
           <Board
             view={state.view}
@@ -433,49 +475,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Command bar — pinned bottom */}
-      {!done && (
-        <div className="z-40 -mx-3 shrink-0 border-t border-sea-700 bg-sea-950/95 backdrop-blur sm:-mx-4">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 p-2 sm:p-3">
-            <div className="min-w-0 flex-1">
-              <ActionPanel
-                choices={selectedActions.map((a) => ({ key: a.key, label: describe(a.key, names) }))}
-                pending={state.pending}
-                onAction={(key) => void apply({ key })}
-                onChoice={(choice) => void apply({ choice })}
-                onCancel={() => setSelected(null)}
-              />
-
-            </div>
-            <div className="ml-auto flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => void undo()}
-                className="rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
-              >
-                ↩ Undo
-              </button>
-              <button
-                type="button"
-                onClick={() => void reset()}
-                className="rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
-              >
-                ⟳ Reset
-              </button>
-              {endTurnAction && (
-                <button
-                  type="button"
-                  onClick={() => void apply({ key: 'endTurn' })}
-                  className="rounded-full bg-gradient-to-b from-bounty-500 to-bounty-700 px-5 py-2 text-sm font-bold text-white shadow-[0_2px_12px_rgba(220,59,59,0.4)] ring-1 ring-bounty-400 transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(220,59,59,0.55)]"
-                >
-                  End turn ⏭
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* First-visit tutorial */}
       {showTutorial && !done && (
