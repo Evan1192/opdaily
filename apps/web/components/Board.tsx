@@ -42,8 +42,8 @@ const CountBadge = ({ n }: { n: number }) => (
   </span>
 );
 
-/** Gold DON!! coins living in the cost area: active bright brass, rested dim. */
-const DonCoins = ({ player }: { player: PlayerView }) => {
+/** Mini card-shaped DON!! tokens living in the cost area, like the official sim. */
+const DonCards = ({ player }: { player: PlayerView }) => {
   const unattached = player.don.filter((d) => !d.attachedTo);
   if (unattached.length === 0) {
     return <span className="text-[10px] text-sea-600">no DON!!</span>;
@@ -54,13 +54,21 @@ const DonCoins = ({ player }: { player: PlayerView }) => {
         <span
           key={d.donId}
           title={d.state === 'active' ? 'Active DON!!' : 'Rested DON!!'}
-          className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold transition-all duration-200 sm:h-5 sm:w-5 sm:text-[10px] ${
+          className={`flex aspect-[600/838] w-16 items-center justify-center rounded-md border transition-all duration-200 sm:w-20 ${
+            d.state === 'rested' ? 'rotate-90' : ''
+          } ${
             d.state === 'active'
-              ? 'bg-gradient-to-br from-brass-300 to-brass-600 text-sea-950 shadow-[0_0_6px_rgba(227,187,95,0.6)]'
-              : 'bg-brass-900 text-brass-700 ring-1 ring-brass-700/50'
+              ? 'border-brass-400 bg-gradient-to-br from-sea-850 to-sea-950 shadow-[0_0_8px_rgba(227,187,95,0.45)]'
+              : 'border-brass-700/40 bg-sea-950 opacity-60'
           }`}
         >
-          ●
+          <span
+            className={`font-display text-sm font-bold tracking-tight sm:text-base ${
+              d.state === 'active' ? 'text-brass-300' : 'text-brass-700'
+            }`}
+          >
+            DON!!
+          </span>
         </span>
       ))}
     </div>
@@ -198,13 +206,20 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
     );
 
-    // Cost area as a short horizontal strip — DON!! coins don't need card height.
+    // Cost area as a real zone (like the official sim): mini DON!! cards inside,
+    // state summary on one edge, label on the other. ~2/3 of a card row tall.
+    const active = player.don.filter((d) => d.state === 'active' && !d.attachedTo).length;
+    const rested = player.don.filter((d) => d.state === 'rested' && !d.attachedTo).length;
+    const attached = player.don.filter((d) => d.attachedTo).length;
     const costStrip = (
-      <div className="flex items-center justify-center gap-2 rounded-lg border border-sea-600/60 px-2 py-0.5 [direction:ltr] sm:py-1">
-        <span className="font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
-          cost
+      <div className="relative flex min-h-[6rem] items-center justify-center rounded-lg border border-sea-600/60 bg-sea-950/40 px-2 pb-4 pt-2 [direction:ltr] sm:min-h-[7.5rem]">
+        <DonCards player={player} />
+        <span className="absolute bottom-0.5 left-1.5 text-[8px] tabular-nums text-sea-600 sm:text-[9px]">
+          Active: {active} · Rested: {rested} · Attached: {attached}
         </span>
-        <DonCoins player={player} />
+        <span className="absolute bottom-0.5 right-1.5 font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
+          cost area
+        </span>
       </div>
     );
 
