@@ -466,9 +466,10 @@ export default function Home() {
             onCard={onCard}
           />
         </FitScale>
-        {/* Nudge hint floats just above your side of the board, next to the glowing cards */}
+        {/* Nudge hint sits over the thin divider between the seats so it never
+            covers cards, DON!! tokens, or the hand fan. */}
         {!done && !selected && !state.pending && actionable.size > 0 && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center">
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center">
             <span className="animate-bounce-soft rounded-full bg-emerald-900/90 px-3 py-1 text-xs font-semibold text-emerald-200 shadow-glow-target ring-1 ring-emerald-500">
               👆 Tap a glowing card to act
             </span>

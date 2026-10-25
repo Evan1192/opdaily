@@ -38,7 +38,7 @@ const Slot = ({
   <div className="min-w-0 [direction:ltr]">
     <div className={`relative ${compact ? 'mx-auto w-[65%]' : 'w-full'}`}>
       {children ?? (
-        <div className="zone-slot w-full aspect-[600/838] opacity-30">{label}</div>
+        <div className="zone-slot w-full aspect-[600/838] opacity-50">{label}</div>
       )}
     </div>
     {!children && <ZoneLabel>{label}</ZoneLabel>}
@@ -106,7 +106,8 @@ const LifeStack = ({ player }: { player: PlayerView }) => {
     <div
       className={`flex w-[13%] shrink-0 flex-col items-center gap-1 rounded-lg border border-bounty-600/40 p-1 [direction:ltr] ${hit ? 'animate-damage-pop' : ''}`}
     >
-      <span className="font-display text-[0.5625rem] tracking-widest text-bounty-400 sm:text-[0.6875rem]">
+      {/* Life count is tier-1 info — it must survive the FitScale shrink. */}
+      <span className="font-display text-[0.6875rem] font-bold tracking-widest text-bounty-400 sm:text-[0.8125rem]">
         LIFE · {player.life.length}
       </span>
       {player.life.length === 0 ? (
@@ -166,7 +167,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
           </div>
         ))}
         {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
-          <div key={i} className="zone-slot w-full aspect-[600/838] opacity-30">CHAR</div>
+          <div key={i} className="zone-slot w-full aspect-[600/838] opacity-50">CHAR</div>
         ))}
       </div>
     );
