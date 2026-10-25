@@ -65,7 +65,7 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
             onError={() => setArtFailed(true)}
           />
         ) : (
-          <div className="flex h-full w-full flex-col justify-between bg-sea-800 p-1 text-[9px] leading-tight">
+          <div className="flex h-full w-full flex-col justify-between bg-sea-800 p-1 text-[0.5625rem] leading-tight">
             <div className="font-bold">{card.name}</div>
             <div>
               {card.cost !== null && <span>C{card.cost} </span>}
@@ -76,7 +76,7 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
         {card.attachedDon > 0 && (
           <span
             key={card.attachedDon}
-            className="absolute left-0.5 top-0.5 flex animate-pop-in items-center gap-0.5 rounded-full bg-black/80 px-1 py-px text-[10px] font-bold text-brass-300"
+            className="absolute left-0.5 top-0.5 flex animate-pop-in items-center gap-0.5 rounded-full bg-black/80 px-1 py-px text-[0.625rem] font-bold text-brass-300"
           >
             <span className="inline-block h-2 w-2 rounded-full bg-brass-400 shadow-[0_0_4px_rgba(227,187,95,0.8)]" />
             +{card.attachedDon}
@@ -84,7 +84,7 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
         )}
         {card.power !== null && !artFailed && (
           <span
-            className={`absolute bottom-0.5 left-0.5 rounded-full bg-black/85 px-1.5 py-px text-[10px] font-bold tabular-nums transition-colors duration-300 ${
+            className={`absolute bottom-0.5 left-0.5 rounded-full bg-black/85 px-1.5 py-px text-[0.625rem] font-bold tabular-nums transition-colors duration-300 ${
               card.attachedDon > 0 ? 'text-bounty-400' : 'text-brass-300'
             }`}
           >
@@ -92,10 +92,10 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
           </span>
         )}
         {card.summoningSick && (
-          <span className="absolute bottom-0.5 right-0.5 rounded bg-sea-700/90 px-1 text-[9px]">zzz</span>
+          <span className="absolute bottom-0.5 right-0.5 rounded bg-sea-700/90 px-1 text-[0.5625rem]">zzz</span>
         )}
         {card.state === 'rested' && (
-          <span className="absolute right-0.5 top-0.5 -rotate-90 rounded bg-black/80 px-1 text-[9px] text-slate-300">
+          <span className="absolute right-0.5 top-0.5 -rotate-90 rounded bg-black/80 px-1 text-[0.5625rem] text-slate-300">
             R
           </span>
         )}
@@ -131,7 +131,7 @@ export function CardBack({
         'bg-[radial-gradient(circle_at_50%_40%,#7d1f1f,#2a0d0d_70%)]',
       ].join(' ')}
     >
-      <div className="flex h-full items-center justify-center text-[10px] text-brass-600/70">☠</div>
+      <div className="flex h-full items-center justify-center text-[0.625rem] text-brass-600/70">☠</div>
     </div>
   );
 }

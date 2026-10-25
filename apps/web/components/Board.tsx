@@ -15,7 +15,7 @@ interface Props {
 
 /** Label shown along the top edge of a zone. */
 const ZoneLabel = ({ children }: { children: React.ReactNode }) => (
-  <span className="block truncate text-center font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
+  <span className="block truncate text-center font-display text-[0.5rem] uppercase tracking-widest text-sea-600 sm:text-[0.5625rem]">
     {children}
   </span>
 );
@@ -37,7 +37,7 @@ const Slot = ({ label, children }: { label: string; children?: React.ReactNode }
 );
 
 const CountBadge = ({ n }: { n: number }) => (
-  <span className="absolute -bottom-1 -right-1 z-10 rounded-full bg-sea-950 px-1.5 text-[10px] font-bold tabular-nums text-slate-300 ring-1 ring-sea-600">
+  <span className="absolute -bottom-1 -right-1 z-10 rounded-full bg-sea-950 px-1.5 text-[0.625rem] font-bold tabular-nums text-slate-300 ring-1 ring-sea-600">
     {n}
   </span>
 );
@@ -46,7 +46,7 @@ const CountBadge = ({ n }: { n: number }) => (
 const DonCards = ({ player }: { player: PlayerView }) => {
   const unattached = player.don.filter((d) => !d.attachedTo);
   if (unattached.length === 0) {
-    return <span className="text-[10px] text-sea-600">no DON!!</span>;
+    return <span className="text-[0.625rem] text-sea-600">no DON!!</span>;
   }
   return (
     <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5">
@@ -97,7 +97,7 @@ const LifeStack = ({ player }: { player: PlayerView }) => {
     <div
       className={`flex w-[13%] shrink-0 flex-col items-center gap-1 rounded-lg border border-bounty-600/40 p-1 [direction:ltr] ${hit ? 'animate-damage-pop' : ''}`}
     >
-      <span className="font-display text-[9px] tracking-widest text-bounty-400 sm:text-[11px]">
+      <span className="font-display text-[0.5625rem] tracking-widest text-bounty-400 sm:text-[0.6875rem]">
         LIFE · {player.life.length}
       </span>
       {player.life.length === 0 ? (
@@ -146,8 +146,11 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
    * chrome lives in a sidebar so the board gets the full viewport height.
    */
   const mat = (player: PlayerView, interactive: boolean, flipped: boolean) => {
+    // Horizontal gaps are deliberately generous: FitScale is height-bound, so
+    // horizontal air lowers the design height-to-width ratio and the whole
+    // board renders wider at the same viewport height.
     const charArea = (
-      <div className="grid grid-cols-5 gap-1 sm:gap-1.5 [direction:ltr]">
+      <div className="grid grid-cols-5 gap-3 sm:gap-10 [direction:ltr]">
         {player.characters.map((c) => (
           <div key={c.instanceId} className="min-w-0">
             <Card card={c} fluid pop {...(interactive ? cardProps(c.instanceId) : {})} />
@@ -160,7 +163,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
     );
 
     const midRow = (
-      <div className={`grid grid-cols-5 items-start gap-1 sm:gap-1.5 ${flipped ? '[direction:rtl]' : ''}`}>
+      <div className={`grid grid-cols-5 items-start gap-3 sm:gap-10 ${flipped ? '[direction:rtl]' : ''}`}>
         <div />
         <Slot label="leader">
           <Card
@@ -198,7 +201,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
     const attached = player.don.filter((d) => d.attachedTo).length;
     const topTrash = player.trash[player.trash.length - 1];
     const bottomRow = (
-      <div className={`grid grid-cols-5 items-stretch gap-1 sm:gap-1.5 ${flipped ? '[direction:rtl]' : ''}`}>
+      <div className={`grid grid-cols-5 items-stretch gap-3 sm:gap-10 ${flipped ? '[direction:rtl]' : ''}`}>
         <Slot label="don!! deck">
           {player.donDeckCount > 0 ? (
             <div className="relative">
@@ -210,10 +213,10 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
         <div className="col-span-3 min-w-0 [direction:ltr]">
           <div className="relative flex h-full items-center justify-center gap-2 rounded-lg border border-sea-600/60 bg-sea-950/40 px-2 pb-4 pt-2">
             <DonCards player={player} />
-            <span className="absolute bottom-0.5 left-1.5 text-[8px] tabular-nums text-sea-600 sm:text-[9px]">
+            <span className="absolute bottom-0.5 left-1.5 text-[0.5rem] tabular-nums text-sea-600 sm:text-[0.5625rem]">
               Active: {active} · Rested: {rested} · Attached: {attached}
             </span>
-            <span className="absolute bottom-0.5 right-1.5 font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
+            <span className="absolute bottom-0.5 right-1.5 font-display text-[0.5rem] uppercase tracking-widest text-sea-600 sm:text-[0.5625rem]">
               cost area
             </span>
           </div>
@@ -231,7 +234,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
 
     const rows = flipped ? [bottomRow, midRow, charArea] : [charArea, midRow, bottomRow];
     return (
-      <div className={`flex items-start gap-1 sm:gap-1.5 ${flipped ? 'flex-row-reverse' : ''}`}>
+      <div className={`flex items-start gap-2 sm:gap-4 ${flipped ? 'flex-row-reverse' : ''}`}>
         <LifeStack player={player} />
         <div className="flex min-w-0 flex-1 flex-col gap-1 sm:gap-1.5">
           {rows.map((row, i) => (
@@ -248,8 +251,8 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       {/* Opponent seat, rotated to face you across the table. The seat label and
           hand straddle the top edge instead of taking a row of their own —
           FitScale is height-bound, so every row shrinks the whole board. */}
-      <section className="relative rounded-xl bg-sea-900/80 p-1 shadow-mat ring-1 ring-brass-700/50 sm:p-1.5">
-        <span className="pointer-events-none absolute left-2 top-1 z-10 font-display text-[10px] tracking-widest text-bounty-400">
+      <section className="relative rounded-xl bg-sea-900/80 px-3 py-1 shadow-mat ring-1 ring-brass-700/50 sm:px-5 sm:py-1.5">
+        <span className="pointer-events-none absolute left-2 top-1 z-10 font-display text-[0.625rem] tracking-widest text-bounty-400">
           OPPONENT
         </span>
         {/* Hand card-backs overlap the seat's outer edge, like cards held across the table. */}
@@ -263,7 +266,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
                   <CardBack key={i} small />
                 ))}
               </span>
-              <span className="text-[10px] text-slate-400">×{view.opponent.handCount}</span>
+              <span className="text-[0.625rem] text-slate-400">×{view.opponent.handCount}</span>
             </>
           ) : null}
         </div>
@@ -284,8 +287,8 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
 
       {/* Your seat */}
-      <section className="relative rounded-xl bg-sea-900/80 p-1 shadow-mat ring-1 ring-brass-600/60 sm:p-1.5">
-        <span className="pointer-events-none absolute right-2 top-1 z-10 font-display text-[10px] tracking-widest text-brass-400">
+      <section className="relative rounded-xl bg-sea-900/80 px-3 py-1 shadow-mat ring-1 ring-brass-600/60 sm:px-5 sm:py-1.5">
+        <span className="pointer-events-none absolute right-2 top-1 z-10 font-display text-[0.625rem] tracking-widest text-brass-400">
           YOUR BOARD
         </span>
         {mat(view.you, true, false)}

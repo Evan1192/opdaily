@@ -164,7 +164,7 @@ function Tutorial({ onDone }: { onDone: () => void }) {
             <button
               type="button"
               onClick={onDone}
-              className="rounded-full px-4 py-2 text-sm text-slate-400 transition-colors hover:text-slate-200"
+              className="min-h-11 rounded-full px-4 py-2 text-sm text-slate-400 transition-colors hover:text-slate-200"
             >
               Skip
             </button>
@@ -172,7 +172,7 @@ function Tutorial({ onDone }: { onDone: () => void }) {
           <button
             type="button"
             onClick={() => (last ? onDone() : setStep(step + 1))}
-            className="rounded-full bg-gradient-to-b from-brass-400 to-brass-600 px-6 py-2 text-sm font-bold text-sea-950 shadow-[0_2px_12px_rgba(201,155,63,0.35)] transition-all hover:-translate-y-0.5"
+            className="min-h-11 rounded-full bg-gradient-to-b from-brass-400 to-brass-600 px-6 py-2 text-sm font-bold text-sea-950 shadow-[0_2px_12px_rgba(201,155,63,0.35)] transition-all hover:-translate-y-0.5"
           >
             {last ? "Let's go ☠" : 'Next'}
           </button>
@@ -360,7 +360,7 @@ export default function Home() {
           <span className="flex flex-wrap items-center gap-1.5 text-xs text-slate-300">
             {puzzle.date} · {puzzle.title}
             <span
-              className={`rounded-full px-2 py-px text-[10px] font-semibold uppercase tracking-wide ring-1 ${diffBadge}`}
+              className={`rounded-full px-2 py-px text-[0.625rem] font-semibold uppercase tracking-wide ring-1 ${diffBadge}`}
             >
               {puzzle.difficulty}
             </span>
@@ -370,7 +370,7 @@ export default function Home() {
 
         {/* Action pips — one per allowed action, filled as they are spent */}
         <div className="flex items-center gap-1.5">
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          <span className="text-[0.625rem] font-semibold uppercase tracking-widest text-slate-500">
             Actions
           </span>
           <div className="flex gap-1">
@@ -385,9 +385,9 @@ export default function Home() {
               />
             ))}
           </div>
-          <span className="text-[10px] text-slate-500">par {state.par}</span>
+          <span className="text-[0.625rem] text-slate-500">par {state.par}</span>
           {!done && (
-            <span className="ml-auto font-mono text-[10px] tabular-nums text-slate-600">
+            <span className="ml-auto font-mono text-[0.625rem] tabular-nums text-slate-600">
               {fmtClock(elapsed)}
             </span>
           )}
@@ -423,7 +423,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => void apply({ key: 'endTurn' })}
-                className="rounded-full bg-gradient-to-b from-bounty-500 to-bounty-700 px-5 py-2 text-sm font-bold text-white shadow-[0_2px_12px_rgba(220,59,59,0.4)] ring-1 ring-bounty-400 transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(220,59,59,0.55)]"
+                className="min-h-11 rounded-full bg-gradient-to-b from-bounty-500 to-bounty-700 px-5 py-2 text-sm font-bold text-white shadow-[0_2px_12px_rgba(220,59,59,0.4)] ring-1 ring-bounty-400 transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(220,59,59,0.55)]"
               >
                 End turn ⏭
               </button>
@@ -432,14 +432,14 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => void undo()}
-                className="flex-1 rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
+                className="min-h-11 flex-1 rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
               >
                 ↩ Undo
               </button>
               <button
                 type="button"
                 onClick={() => void reset()}
-                className="flex-1 rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
+                className="min-h-11 flex-1 rounded-full bg-sea-800 px-4 py-2 text-sm font-medium text-slate-200 ring-1 ring-sea-600 transition-all hover:-translate-y-0.5 hover:bg-sea-700"
               >
                 ⟳ Reset
               </button>
@@ -519,7 +519,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => navigator.clipboard.writeText(shareText)}
-                  className="rounded-lg bg-brass-600 px-4 py-1.5 text-sm font-semibold text-sea-950 transition-colors hover:bg-brass-500"
+                  className="min-h-11 rounded-lg bg-brass-600 px-4 py-1.5 text-sm font-semibold text-sea-950 transition-colors hover:bg-brass-500"
                 >
                   Copy result
                 </button>
@@ -546,7 +546,7 @@ export default function Home() {
                   />
                   <button
                     type="submit"
-                    className="rounded-lg bg-sea-700 px-4 py-1.5 text-sm text-slate-200 transition-colors hover:bg-sea-600"
+                    className="min-h-11 rounded-lg bg-sea-700 px-4 py-1.5 text-sm text-slate-200 transition-colors hover:bg-sea-600"
                   >
                     Save
                   </button>
@@ -566,7 +566,7 @@ export default function Home() {
                     resetIdentity();
                     window.location.reload();
                   }}
-                  className="text-xs text-sea-600 underline decoration-dotted underline-offset-2 hover:text-slate-400"
+                  className="min-h-11 px-2 text-xs text-sea-600 underline decoration-dotted underline-offset-2 hover:text-slate-400"
                 >
                   [test] redo puzzle as new player
                 </button>
@@ -587,7 +587,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => void reset()}
-                    className="rounded-lg bg-bounty-700 px-6 py-2 font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600"
+                    className="min-h-11 rounded-lg bg-bounty-700 px-6 py-2 font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600"
                   >
                     Reset and try again
                   </button>
@@ -607,7 +607,7 @@ export default function Home() {
                     resetIdentity();
                     window.location.reload();
                   }}
-                  className="text-xs text-sea-600 underline decoration-dotted underline-offset-2 hover:text-slate-400"
+                  className="min-h-11 px-2 text-xs text-sea-600 underline decoration-dotted underline-offset-2 hover:text-slate-400"
                 >
                   [test] redo puzzle as new player
                 </button>

@@ -35,6 +35,6 @@
 @layer components {
   /* Dashed empty zone slot on the playmat. */
   .zone-slot {
-    @apply flex items-center justify-center rounded-md border border-dashed border-sea-600/50 text-[9px] font-semibold uppercase tracking-widest text-sea-600;
+    @apply flex items-center justify-center rounded-md border border-dashed border-sea-600/50 text-[0.5625rem] font-semibold uppercase tracking-widest text-sea-600;
   }
 }

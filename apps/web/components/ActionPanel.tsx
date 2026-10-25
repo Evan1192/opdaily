@@ -60,7 +60,7 @@ export function ActionPanel({ choices, pending, onAction, onChoice, onCancel }: 
                 key={i}
                 type="button"
                 onClick={() => onChoice(i)}
-                className="rounded-lg bg-sea-800 px-4 py-2 text-left text-sm text-slate-100 ring-1 ring-sea-600 transition-colors hover:bg-sea-700 hover:ring-brass-500"
+                className="min-h-11 rounded-lg bg-sea-800 px-4 py-2 text-left text-sm text-slate-100 ring-1 ring-sea-600 transition-colors hover:bg-sea-700 hover:ring-brass-500"
               >
                 {pendingLabel(pending, i)}
               </button>
@@ -83,8 +83,8 @@ export function ActionPanel({ choices, pending, onAction, onChoice, onCancel }: 
           onClick={() => onAction(c.key)}
           className={
             c.key === 'endTurn'
-              ? 'ml-auto rounded-lg bg-bounty-700 px-3 py-1.5 text-sm font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600'
-              : 'rounded-lg bg-emerald-800 px-3 py-1.5 text-sm font-semibold text-emerald-50 ring-1 ring-emerald-600 transition-colors hover:bg-emerald-700'
+              ? 'ml-auto min-h-11 rounded-lg bg-bounty-700 px-3 py-1.5 text-sm font-semibold text-red-100 ring-1 ring-bounty-500 transition-colors hover:bg-bounty-600'
+              : 'min-h-11 rounded-lg bg-emerald-800 px-3 py-1.5 text-sm font-semibold text-emerald-50 ring-1 ring-emerald-600 transition-colors hover:bg-emerald-700'
           }
         >
           <span className="mr-1.5 text-brass-300">{kindIcon(c.key)}</span>
@@ -94,7 +94,7 @@ export function ActionPanel({ choices, pending, onAction, onChoice, onCancel }: 
       <button
         type="button"
         onClick={onCancel}
-        className="text-xs text-slate-500 transition-colors hover:text-slate-300"
+        className="min-h-11 px-2 text-xs text-slate-500 transition-colors hover:text-slate-300"
       >
         cancel
       </button>
