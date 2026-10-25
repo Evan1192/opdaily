@@ -20,7 +20,11 @@ const ZoneLabel = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
-/** A single-card zone cell: fixed card aspect so the mat keeps its proportions. */
+/**
+ * A single-card zone cell: fixed card aspect so the mat keeps its proportions.
+ * The label only renders on empty slots — occupied slots don't need the extra
+ * height (FitScale is height-bound, so every label shrinks the whole board).
+ */
 const Slot = ({ label, children }: { label: string; children?: React.ReactNode }) => (
   <div className="min-w-0 [direction:ltr]">
     <div className="relative w-full">
@@ -28,7 +32,7 @@ const Slot = ({ label, children }: { label: string; children?: React.ReactNode }
         <div className="zone-slot w-full aspect-[600/838] opacity-30">{label}</div>
       )}
     </div>
-    <ZoneLabel>{label}</ZoneLabel>
+    {!children && <ZoneLabel>{label}</ZoneLabel>}
   </div>
 );
 
@@ -124,34 +128,32 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
   });
 
   /**
-   * One player's seat, laid out like the OPLAY simulator / official playmat:
+   * One player's seat, compressed to two card rows plus a short cost strip so
+   * the cards render as large as possible (FitScale is height-bound — every
+   * extra row shrinks the whole board):
    *   row 1 — CHARACTER AREA (5 slots, full width)
-   *   row 2 — [space] · LEADER · STAGE · DECK · [space]
-   *   row 3 — DON!! DECK · COST AREA · TRASH
-   * All slots share the character-card size so everything reads equally.
+   *   row 2 — LEADER · STAGE · DECK · DON!! DECK · TRASH
+   *   strip — COST AREA (DON!! coins, card-height not needed)
    * LIFE sits as an upright overlapping stack on the near edge.
    * `flipped` renders the opponent's seat rotated 180°.
    */
   const mat = (player: PlayerView, interactive: boolean, flipped: boolean) => {
     const charArea = (
-      <div className="rounded-lg border border-sea-600/60 p-1 sm:p-1.5 [direction:ltr]">
-        <div className="grid grid-cols-5 gap-1 sm:gap-2">
-          {player.characters.map((c) => (
-            <div key={c.instanceId} className="min-w-0">
-              <Card card={c} fluid pop {...(interactive ? cardProps(c.instanceId) : {})} />
-            </div>
-          ))}
-          {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
-            <div key={i} className="zone-slot w-full aspect-[600/838] opacity-30">CHAR</div>
-          ))}
-        </div>
-        <ZoneLabel>character area</ZoneLabel>
+      <div className="grid grid-cols-5 gap-1 sm:gap-1.5 [direction:ltr]">
+        {player.characters.map((c) => (
+          <div key={c.instanceId} className="min-w-0">
+            <Card card={c} fluid pop {...(interactive ? cardProps(c.instanceId) : {})} />
+          </div>
+        ))}
+        {Array.from({ length: Math.max(0, 5 - player.characters.length) }, (_, i) => (
+          <div key={i} className="zone-slot w-full aspect-[600/838] opacity-30">CHAR</div>
+        ))}
       </div>
     );
 
+    const topTrash = player.trash[player.trash.length - 1];
     const midRow = (
       <div className={`grid grid-cols-5 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
-        <div />
         <Slot label="leader">
           <Card
             card={player.leader}
@@ -177,13 +179,6 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ) : undefined}
         </Slot>
-        <div />
-      </div>
-    );
-
-    const topTrash = player.trash[player.trash.length - 1];
-    const bottomRow = (
-      <div className={`grid grid-cols-5 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
         <Slot label="don!! deck">
           {player.donDeckCount > 0 ? (
             <div className="relative">
@@ -192,12 +187,6 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ) : undefined}
         </Slot>
-        <div className="col-span-3 self-stretch [direction:ltr]">
-          <div className="flex min-h-full flex-col justify-center rounded-lg border border-sea-600/60 p-1.5 sm:p-2">
-            <DonCoins player={player} />
-          </div>
-          <ZoneLabel>cost area</ZoneLabel>
-        </div>
         <Slot label="trash">
           {topTrash ? (
             <div key={topTrash.instanceId} className="relative">
@@ -209,11 +198,21 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
     );
 
-    const rows = flipped ? [bottomRow, midRow, charArea] : [charArea, midRow, bottomRow];
+    // Cost area as a short horizontal strip — DON!! coins don't need card height.
+    const costStrip = (
+      <div className="flex items-center justify-center gap-2 rounded-lg border border-sea-600/60 px-2 py-0.5 [direction:ltr] sm:py-1">
+        <span className="font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
+          cost
+        </span>
+        <DonCoins player={player} />
+      </div>
+    );
+
+    const rows = flipped ? [costStrip, midRow, charArea] : [charArea, midRow, costStrip];
     return (
-      <div className={`flex items-start gap-1.5 sm:gap-2 ${flipped ? 'flex-row-reverse' : ''}`}>
+      <div className={`flex items-start gap-1 sm:gap-1.5 ${flipped ? 'flex-row-reverse' : ''}`}>
         <LifeStack player={player} />
-        <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:gap-2">
+        <div className="flex min-w-0 flex-1 flex-col gap-1 sm:gap-1.5">
           {rows.map((row, i) => (
             <div key={i}>{row}</div>
           ))}
