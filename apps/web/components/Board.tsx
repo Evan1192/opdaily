@@ -63,7 +63,10 @@ const DonCoins = ({ player }: { player: PlayerView }) => {
   );
 };
 
-/** Life as a sideways stack on the mat edge, like the physical game. */
+/**
+ * Life as an upright stack on the mat edge: top card fully visible, the rest
+ * peek out beneath it — like the OPLAY simulator.
+ */
 const LifeStack = ({ player }: { player: PlayerView }) => {
   // Flinch with a damage pop whenever this stack loses a card.
   const prevLife = useRef(player.life.length);
@@ -79,19 +82,23 @@ const LifeStack = ({ player }: { player: PlayerView }) => {
   }, [player.life.length]);
 
   return (
-    <div className={`flex w-[11%] shrink-0 flex-col items-center gap-1 [direction:ltr] ${hit ? 'animate-damage-pop' : ''}`}>
-      <span className="font-display text-[8px] tracking-widest text-brass-500 sm:text-[10px]">
-        LIFE {player.life.length}
+    <div
+      className={`flex w-[13%] shrink-0 flex-col items-center gap-1 rounded-lg border border-bounty-600/40 p-1 [direction:ltr] ${hit ? 'animate-damage-pop' : ''}`}
+    >
+      <span className="font-display text-[9px] tracking-widest text-bounty-400 sm:text-[11px]">
+        LIFE · {player.life.length}
       </span>
       {player.life.length === 0 ? (
-        <div className="zone-slot aspect-[838/600] w-full !border-bounty-600/60 !text-bounty-500">0</div>
+        <div className="zone-slot aspect-[600/838] w-full !border-bounty-600/60 !text-bounty-500">0</div>
       ) : (
-        <div className="flex w-full flex-col gap-0.5">
+        <div className="flex w-full flex-col">
           {player.life.map((card, i) => (
-            <div key={card ? card.instanceId : i} className="relative w-full aspect-[838/600] overflow-hidden rounded-md">
-              <div className="absolute left-1/2 top-1/2 w-[71.6%] -translate-x-1/2 -translate-y-1/2 rotate-90">
-                {card ? <Card card={card} fluid /> : <CardBack fluid />}
-              </div>
+            <div
+              key={card ? card.instanceId : i}
+              className={`relative w-full ${i > 0 ? 'mt-[-115%]' : ''}`}
+              style={{ zIndex: player.life.length - i }}
+            >
+              {card ? <Card card={card} fluid /> : <CardBack fluid />}
             </div>
           ))}
         </div>
@@ -117,13 +124,13 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
   });
 
   /**
-   * One player's seat, laid out like the official playmat but compressed to
-   * two rows so the cards that matter stay big and readable:
-   *   row 1 — CHARACTER AREA (full width, 5 slots)
-   *   row 2 — LEADER · STAGE · COST AREA
-   * The piles (deck, DON!! deck, trash) live in a narrow column on the far
-   * edge — they only need counts, not readable art. LIFE sits sideways along
-   * the near edge. `flipped` renders the opponent's seat rotated 180°.
+   * One player's seat, laid out like the OPLAY simulator / official playmat:
+   *   row 1 — CHARACTER AREA (5 slots, full width)
+   *   row 2 — [space] · LEADER · STAGE · DECK · [space]
+   *   row 3 — DON!! DECK · COST AREA · TRASH
+   * All slots share the character-card size so everything reads equally.
+   * LIFE sits as an upright overlapping stack on the near edge.
+   * `flipped` renders the opponent's seat rotated 180°.
    */
   const mat = (player: PlayerView, interactive: boolean, flipped: boolean) => {
     const charArea = (
@@ -144,6 +151,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
 
     const midRow = (
       <div className={`grid grid-cols-5 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
+        <div />
         <Slot label="leader">
           <Card
             card={player.leader}
@@ -161,18 +169,6 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             />
           ) : undefined}
         </Slot>
-        <div className="col-span-3 self-stretch [direction:ltr]">
-          <div className="flex min-h-full flex-col justify-center rounded-lg border border-sea-600/60 p-1.5 sm:p-2">
-            <DonCoins player={player} />
-          </div>
-          <ZoneLabel>cost area</ZoneLabel>
-        </div>
-      </div>
-    );
-
-    const topTrash = player.trash[player.trash.length - 1];
-    const piles = (
-      <div className={`flex w-[7.5%] shrink-0 flex-col justify-between gap-1 [direction:ltr] ${flipped ? 'flex-col-reverse' : ''}`}>
         <Slot label="deck">
           {player.deckCount > 0 ? (
             <div className="relative">
@@ -181,6 +177,13 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ) : undefined}
         </Slot>
+        <div />
+      </div>
+    );
+
+    const topTrash = player.trash[player.trash.length - 1];
+    const bottomRow = (
+      <div className={`grid grid-cols-5 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
         <Slot label="don!! deck">
           {player.donDeckCount > 0 ? (
             <div className="relative">
@@ -189,6 +192,12 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ) : undefined}
         </Slot>
+        <div className="col-span-3 self-stretch [direction:ltr]">
+          <div className="flex min-h-full flex-col justify-center rounded-lg border border-sea-600/60 p-1.5 sm:p-2">
+            <DonCoins player={player} />
+          </div>
+          <ZoneLabel>cost area</ZoneLabel>
+        </div>
         <Slot label="trash">
           {topTrash ? (
             <div key={topTrash.instanceId} className="relative">
@@ -200,16 +209,15 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
     );
 
-    const rows = flipped ? [midRow, charArea] : [charArea, midRow];
+    const rows = flipped ? [bottomRow, midRow, charArea] : [charArea, midRow, bottomRow];
     return (
-      <div className={`flex gap-1.5 sm:gap-2 ${flipped ? 'flex-row-reverse' : ''}`}>
+      <div className={`flex items-start gap-1.5 sm:gap-2 ${flipped ? 'flex-row-reverse' : ''}`}>
         <LifeStack player={player} />
         <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:gap-2">
           {rows.map((row, i) => (
             <div key={i}>{row}</div>
           ))}
         </div>
-        {piles}
       </div>
     );
   };

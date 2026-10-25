@@ -102,9 +102,9 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
       </button>
       {/* Full-size art preview on hover — desktop only, never captures the pointer. */}
       {!artFailed && (
-        <span className="pointer-events-none absolute left-full top-0 z-40 ml-2 hidden w-52 lg:group-hover:block">
+        <span className="pointer-events-none absolute left-full top-0 z-40 ml-2 hidden w-80 lg:group-hover:block">
           <span className="relative block aspect-[600/838] overflow-hidden rounded-lg shadow-2xl ring-1 ring-brass-600/60">
-            <Image src={artUrl(card.definitionId)} alt="" fill sizes="208px" className="object-cover" />
+            <Image src={artUrl(card.definitionId)} alt="" fill sizes="320px" className="object-cover" />
           </span>
         </span>
       )}
