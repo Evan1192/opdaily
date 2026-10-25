@@ -56,7 +56,7 @@ const fmtClock = (ms: number): string => {
  * Renders children at a fixed design width and scales them down (never up)
  * so the whole board always fits inside the available space — no scrolling.
  */
-const DESIGN_W = 896; // px — matches max-w-4xl
+const DESIGN_W = 1152; // px — matches max-w-6xl
 function FitScale({ children }: { children: React.ReactNode }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -349,7 +349,7 @@ export default function Home() {
         : 'bg-bounty-900/60 text-bounty-400 ring-bounty-700';
 
   return (
-    <main className="mx-auto flex h-full max-w-4xl flex-col px-3 pt-2 sm:px-4">
+    <main className="mx-auto flex h-full max-w-6xl flex-col px-3 pt-2 sm:px-4">
       {/* Top bar */}
       <header className="mb-1 flex shrink-0 flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-3">
@@ -437,7 +437,7 @@ export default function Home() {
       {/* Command bar — pinned bottom */}
       {!done && (
         <div className="z-40 -mx-3 shrink-0 border-t border-sea-700 bg-sea-950/95 backdrop-blur sm:-mx-4">
-          <div className="mx-auto flex max-w-4xl flex-wrap items-center gap-2 p-2 sm:p-3">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 p-2 sm:p-3">
             <div className="min-w-0 flex-1">
               <ActionPanel
                 choices={selectedActions.map((a) => ({ key: a.key, label: describe(a.key, names) }))}

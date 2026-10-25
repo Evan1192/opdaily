@@ -117,12 +117,13 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
   });
 
   /**
-   * One player's seat, laid out like the official playmat:
+   * One player's seat, laid out like the official playmat but compressed to
+   * two rows so the cards that matter stay big and readable:
    *   row 1 — CHARACTER AREA (full width, 5 slots)
-   *   row 2 — [phases/space] LEADER · STAGE · [space] · DECK
-   *   row 3 — DON!! DECK · COST AREA · TRASH
-   * with LIFE sideways along the edge. `flipped` renders the opponent's seat
-   * rotated 180° (rows and columns reversed, life on the far side).
+   *   row 2 — LEADER · STAGE · COST AREA
+   * The piles (deck, DON!! deck, trash) live in a narrow column on the far
+   * edge — they only need counts, not readable art. LIFE sits sideways along
+   * the near edge. `flipped` renders the opponent's seat rotated 180°.
    */
   const mat = (player: PlayerView, interactive: boolean, flipped: boolean) => {
     const charArea = (
@@ -142,8 +143,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
     );
 
     const midRow = (
-      <div className={`grid grid-cols-6 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
-        <div className="col-span-2" />
+      <div className={`grid grid-cols-5 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
         <Slot label="leader">
           <Card
             card={player.leader}
@@ -161,7 +161,18 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             />
           ) : undefined}
         </Slot>
-        <div />
+        <div className="col-span-3 self-stretch [direction:ltr]">
+          <div className="flex min-h-full flex-col justify-center rounded-lg border border-sea-600/60 p-1.5 sm:p-2">
+            <DonCoins player={player} />
+          </div>
+          <ZoneLabel>cost area</ZoneLabel>
+        </div>
+      </div>
+    );
+
+    const topTrash = player.trash[player.trash.length - 1];
+    const piles = (
+      <div className={`flex w-[7.5%] shrink-0 flex-col justify-between gap-1 [direction:ltr] ${flipped ? 'flex-col-reverse' : ''}`}>
         <Slot label="deck">
           {player.deckCount > 0 ? (
             <div className="relative">
@@ -170,12 +181,6 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ) : undefined}
         </Slot>
-      </div>
-    );
-
-    const topTrash = player.trash[player.trash.length - 1];
-    const bottomRow = (
-      <div className={`grid grid-cols-6 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
         <Slot label="don!! deck">
           {player.donDeckCount > 0 ? (
             <div className="relative">
@@ -184,12 +189,6 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </div>
           ) : undefined}
         </Slot>
-        <div className="col-span-4 self-stretch [direction:ltr]">
-          <div className="flex min-h-full flex-col justify-center rounded-lg border border-sea-600/60 p-1.5 sm:p-2">
-            <DonCoins player={player} />
-          </div>
-          <ZoneLabel>cost area</ZoneLabel>
-        </div>
         <Slot label="trash">
           {topTrash ? (
             <div key={topTrash.instanceId} className="relative">
@@ -201,7 +200,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
     );
 
-    const rows = flipped ? [bottomRow, midRow, charArea] : [charArea, midRow, bottomRow];
+    const rows = flipped ? [midRow, charArea] : [charArea, midRow];
     return (
       <div className={`flex gap-1.5 sm:gap-2 ${flipped ? 'flex-row-reverse' : ''}`}>
         <LifeStack player={player} />
@@ -210,6 +209,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             <div key={i}>{row}</div>
           ))}
         </div>
+        {piles}
       </div>
     );
   };
