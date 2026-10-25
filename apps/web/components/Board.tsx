@@ -136,12 +136,11 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
   });
 
   /**
-   * One player's seat, compressed to two card rows plus a short cost strip so
-   * the cards render as large as possible (FitScale is height-bound — every
-   * extra row shrinks the whole board):
-   *   row 1 — CHARACTER AREA (5 slots, full width)
-   *   row 2 — LEADER · STAGE · DECK · DON!! DECK · TRASH
-   *   strip — COST AREA (DON!! coins, card-height not needed)
+   * One player's seat, exactly two card rows tall (FitScale is height-bound —
+   * every extra row shrinks the whole board), ~2.3:1 wide like the OPLAY sim:
+   *   row 1 — CHARACTER AREA (5 slots)
+   *   row 2 — LEADER · STAGE · COST AREA (span 3: DON!! deck pile + DON!! cards)
+   *   far edge — DECK / TRASH piles stacked, full card size
    * LIFE sits as an upright overlapping stack on the near edge.
    * `flipped` renders the opponent's seat rotated 180°.
    */
@@ -159,9 +158,32 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
     );
 
-    const topTrash = player.trash[player.trash.length - 1];
+    // Cost area fills the rest of the leader row: DON!! deck pile on one edge,
+    // DON!! cards in the middle, state summary + label along the bottom.
+    const active = player.don.filter((d) => d.state === 'active' && !d.attachedTo).length;
+    const rested = player.don.filter((d) => d.state === 'rested' && !d.attachedTo).length;
+    const attached = player.don.filter((d) => d.attachedTo).length;
+    const costArea = (
+      <div className="relative flex h-full items-center justify-center gap-2 rounded-lg border border-sea-600/60 bg-sea-950/40 px-2 pb-4 pt-2 [direction:ltr]">
+        {player.donDeckCount > 0 && (
+          <div className="relative w-14 shrink-0 sm:w-16">
+            <CardBack fluid />
+            <CountBadge n={player.donDeckCount} />
+            <ZoneLabel>don!! deck</ZoneLabel>
+          </div>
+        )}
+        <DonCards player={player} />
+        <span className="absolute bottom-0.5 left-1.5 text-[8px] tabular-nums text-sea-600 sm:text-[9px]">
+          Active: {active} · Rested: {rested} · Attached: {attached}
+        </span>
+        <span className="absolute bottom-0.5 right-1.5 font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
+          cost area
+        </span>
+      </div>
+    );
+
     const midRow = (
-      <div className={`grid grid-cols-5 items-start gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
+      <div className={`grid grid-cols-5 items-stretch gap-1 sm:gap-2 ${flipped ? '[direction:rtl]' : ''}`}>
         <Slot label="leader">
           <Card
             card={player.leader}
@@ -179,19 +201,21 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             />
           ) : undefined}
         </Slot>
+        <div className="col-span-3 min-w-0">{costArea}</div>
+      </div>
+    );
+
+    // Deck + trash as a full-size pile column on the far edge, like OPLAY.
+    const topTrash = player.trash[player.trash.length - 1];
+    const piles = (
+      <div
+        className={`flex w-[13%] shrink-0 flex-col justify-between gap-1 [direction:ltr] ${flipped ? 'flex-col-reverse' : ''}`}
+      >
         <Slot label="deck">
           {player.deckCount > 0 ? (
             <div className="relative">
               <CardBack fluid />
               <CountBadge n={player.deckCount} />
-            </div>
-          ) : undefined}
-        </Slot>
-        <Slot label="don!! deck">
-          {player.donDeckCount > 0 ? (
-            <div className="relative">
-              <CardBack fluid />
-              <CountBadge n={player.donDeckCount} />
             </div>
           ) : undefined}
         </Slot>
@@ -206,24 +230,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
     );
 
-    // Cost area as a real zone (like the official sim): mini DON!! cards inside,
-    // state summary on one edge, label on the other. ~2/3 of a card row tall.
-    const active = player.don.filter((d) => d.state === 'active' && !d.attachedTo).length;
-    const rested = player.don.filter((d) => d.state === 'rested' && !d.attachedTo).length;
-    const attached = player.don.filter((d) => d.attachedTo).length;
-    const costStrip = (
-      <div className="relative flex min-h-[6rem] items-center justify-center rounded-lg border border-sea-600/60 bg-sea-950/40 px-2 pb-4 pt-2 [direction:ltr] sm:min-h-[7.5rem]">
-        <DonCards player={player} />
-        <span className="absolute bottom-0.5 left-1.5 text-[8px] tabular-nums text-sea-600 sm:text-[9px]">
-          Active: {active} · Rested: {rested} · Attached: {attached}
-        </span>
-        <span className="absolute bottom-0.5 right-1.5 font-display text-[8px] uppercase tracking-widest text-sea-600 sm:text-[9px]">
-          cost area
-        </span>
-      </div>
-    );
-
-    const rows = flipped ? [costStrip, midRow, charArea] : [charArea, midRow, costStrip];
+    const rows = flipped ? [midRow, charArea] : [charArea, midRow];
     return (
       <div className={`flex items-start gap-1 sm:gap-1.5 ${flipped ? 'flex-row-reverse' : ''}`}>
         <LifeStack player={player} />
@@ -232,43 +239,41 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             <div key={i}>{row}</div>
           ))}
         </div>
+        {piles}
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Opponent seat, rotated to face you across the table */}
-      <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-brass-700/50 sm:p-3">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="font-display text-xs tracking-widest text-bounty-400">OPPONENT</span>
-          {view.opponent.hand !== null ? (
-            <span className="text-[10px] uppercase tracking-wide text-slate-400">hand — known</span>
+    // pt-5 leaves room for the opponent hand overhanging the seat's top edge.
+    <div className="flex flex-col gap-1 pt-5">
+      {/* Opponent seat, rotated to face you across the table. The seat label and
+          hand straddle the top edge instead of taking a row of their own —
+          FitScale is height-bound, so every row shrinks the whole board. */}
+      <section className="relative rounded-xl bg-sea-900/80 p-1.5 shadow-mat ring-1 ring-brass-700/50 sm:p-2">
+        <span className="pointer-events-none absolute left-2 top-1 z-10 font-display text-[10px] tracking-widest text-bounty-400">
+          OPPONENT
+        </span>
+        {/* Hand card-backs overlap the seat's outer edge, like cards held across the table. */}
+        <div className="pointer-events-none absolute -top-5 left-1/2 z-10 flex -translate-x-1/2 items-end gap-1">
+          {view.opponent.hand !== null && view.opponent.hand.length > 0 ? (
+            view.opponent.hand.map((c) => <Card key={c.instanceId} card={c} small />)
           ) : view.opponent.handCount > 0 ? (
-            <span className="flex items-center gap-1 text-[10px] text-slate-400">
+            <>
               <span className="flex -space-x-7">
                 {Array.from({ length: Math.min(view.opponent.handCount, 5) }, (_, i) => (
                   <CardBack key={i} small />
                 ))}
               </span>
-              ×{view.opponent.handCount}
-            </span>
-          ) : (
-            <span className="text-[10px] uppercase tracking-wide text-sea-600">hand empty</span>
-          )}
+              <span className="text-[10px] text-slate-400">×{view.opponent.handCount}</span>
+            </>
+          ) : null}
         </div>
-        {view.opponent.hand !== null && view.opponent.hand.length > 0 && (
-          <div className="mb-2 flex gap-1.5">
-            {view.opponent.hand.map((c) => (
-              <Card key={c.instanceId} card={c} small />
-            ))}
-          </div>
-        )}
         {mat(view.opponent, true, true)}
       </section>
 
       {/* Center divider — combat banner slots in when an attack is live. */}
-      <div className="relative flex h-6 items-center">
+      <div className="relative flex h-3 items-center">
         <div className="h-px w-full bg-gradient-to-r from-transparent via-brass-700/60 to-transparent" />
         {view.combat && (
           <div className="absolute inset-x-0 flex justify-center">
@@ -281,35 +286,31 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
       </div>
 
       {/* Your seat */}
-      <section className="rounded-xl bg-sea-900/80 p-2 shadow-mat ring-1 ring-brass-600/60 sm:p-3">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="font-display text-xs tracking-widest text-brass-400">YOUR BOARD</span>
-        </div>
+      <section className="relative rounded-xl bg-sea-900/80 p-1.5 shadow-mat ring-1 ring-brass-600/60 sm:p-2">
+        <span className="pointer-events-none absolute right-2 top-1 z-10 font-display text-[10px] tracking-widest text-brass-400">
+          YOUR BOARD
+        </span>
         {mat(view.you, true, false)}
         {view.you.hand && view.you.hand.length > 0 && (
-          <div className="mt-3 border-t border-sea-700 pt-2">
-            <span className="mb-1 block font-display text-[10px] tracking-widest text-brass-500">
-              HAND
-            </span>
-            {/* Fanned arc — center card highest, edges rotate outward and dip */}
-            <div className="flex justify-center pb-5 pt-1">
-              {view.you.hand.map((c, i, arr) => {
-                const off = i - (arr.length - 1) / 2;
-                return (
-                  <div
-                    key={c.instanceId}
-                    className="relative -ml-5 transition-transform duration-200 first:ml-0 hover:z-20 sm:-ml-7"
-                    style={{
-                      transform: `rotate(${off * 5}deg) translateY(${Math.abs(off) * 7}px)`,
-                      transformOrigin: 'bottom center',
-                      zIndex: i,
-                    }}
-                  >
-                    <Card card={c} enterDelay={i * 70} {...cardProps(c.instanceId)} />
-                  </div>
-                );
-              })}
-            </div>
+          /* Fanned arc overlapping the cost strip — like a hand held at the
+             table edge. Negative margin reclaims a full card row of height. */
+          <div className="relative z-30 -mt-10 flex justify-center pb-1 sm:-mt-12">
+            {view.you.hand.map((c, i, arr) => {
+              const off = i - (arr.length - 1) / 2;
+              return (
+                <div
+                  key={c.instanceId}
+                  className="relative -ml-5 transition-transform duration-200 first:ml-0 hover:z-20 sm:-ml-7"
+                  style={{
+                    transform: `rotate(${off * 5}deg) translateY(${Math.abs(off) * 7}px)`,
+                    transformOrigin: 'bottom center',
+                    zIndex: i,
+                  }}
+                >
+                  <Card card={c} enterDelay={i * 70} {...cardProps(c.instanceId)} />
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
