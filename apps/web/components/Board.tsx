@@ -25,9 +25,18 @@ const ZoneLabel = ({ children }: { children: React.ReactNode }) => (
  * The label only renders on empty slots — occupied slots don't need the extra
  * height (FitScale is height-bound, so every label shrinks the whole board).
  */
-const Slot = ({ label, children }: { label: string; children?: React.ReactNode }) => (
+const Slot = ({
+  label,
+  children,
+  compact,
+}: {
+  label: string;
+  children?: React.ReactNode;
+  /** Render the card at ~65% width — for pile rows that shouldn't set the row height. */
+  compact?: boolean;
+}) => (
   <div className="min-w-0 [direction:ltr]">
-    <div className="relative w-full">
+    <div className={`relative ${compact ? 'mx-auto w-[65%]' : 'w-full'}`}>
       {children ?? (
         <div className="zone-slot w-full aspect-[600/838] opacity-30">{label}</div>
       )}
@@ -202,7 +211,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
     const topTrash = player.trash[player.trash.length - 1];
     const bottomRow = (
       <div className={`grid grid-cols-5 items-stretch gap-3 sm:gap-10 ${flipped ? '[direction:rtl]' : ''}`}>
-        <Slot label="don!! deck">
+        <Slot label="don!! deck" compact>
           {player.donDeckCount > 0 ? (
             <div className="relative">
               <CardBack fluid />
@@ -211,7 +220,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
           ) : undefined}
         </Slot>
         <div className="col-span-3 min-w-0 [direction:ltr]">
-          <div className="relative flex h-full items-center justify-center gap-2 rounded-lg border border-sea-600/60 bg-sea-950/40 px-2 pb-4 pt-2">
+          <div className="relative flex h-full items-center justify-center gap-2 rounded-lg border border-sea-600/60 bg-sea-950/40 px-2 pb-3 pt-1">
             <DonCards player={player} />
             <span className="absolute bottom-0.5 left-1.5 text-[0.5rem] tabular-nums text-sea-600 sm:text-[0.5625rem]">
               Active: {active} · Rested: {rested} · Attached: {attached}
@@ -221,7 +230,7 @@ export function Board({ view, selected, targets, actionable, onCard }: Props) {
             </span>
           </div>
         </div>
-        <Slot label="trash">
+        <Slot label="trash" compact>
           {topTrash ? (
             <div key={topTrash.instanceId} className="relative">
               <Card card={topTrash} fluid pop />
