@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { artUrl, type CardView } from '@/lib/types';
 
 interface Props {
@@ -21,9 +22,34 @@ interface Props {
   fx?: 'lunge' | 'hit';
 }
 
+/**
+ * Full-art preview, portaled to <body> as position:fixed so it escapes both the
+ * FitScale transform (which would shrink it with the board) and every z-index
+ * stacking context on the mat. Sized near the art's native 600×838 resolution
+ * so card text is readable. Positioned beside the hovered card, clamped to the
+ * viewport, flipping to the left edge when there's no room on the right.
+ */
+function HoverPreview({ anchor, src }: { anchor: DOMRect; src: string }) {
+  const h = Math.min(600, window.innerHeight - 16);
+  const w = Math.round(h * (600 / 838));
+  let left = anchor.right + 12;
+  if (left + w > window.innerWidth - 8) left = anchor.left - w - 12;
+  left = Math.max(8, left);
+  const top = Math.min(Math.max(anchor.top, 8), window.innerHeight - h - 8);
+  return (
+    <span
+      className="pointer-events-none fixed z-[70] block overflow-hidden rounded-xl shadow-2xl ring-2 ring-brass-600/70"
+      style={{ left, top, width: w, height: h }}
+    >
+      <Image src={src} alt="" fill sizes="440px" quality={95} className="object-cover" />
+    </span>
+  );
+}
+
 /** A card: art when it loads, a text face as fallback. Rested cards rotate. */
 export function Card({ card, selected, dimmed, highlight, onClick, small, fluid, enterDelay, pop, fx }: Props) {
   const [artFailed, setArtFailed] = useState(false);
+  const [previewAt, setPreviewAt] = useState<DOMRect | null>(null);
   const width = fluid ? 'w-full' : small ? 'w-12 sm:w-16' : 'w-16 sm:w-20 md:w-24';
   const enterAnim =
     fx === 'lunge' ? 'animate-lunge' : fx === 'hit' ? 'animate-damage-pop' : pop ? 'animate-pop-in' : 'animate-card-enter';
@@ -33,6 +59,13 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
         card.state === 'rested' && !fluid ? 'mx-2 sm:mx-3' : ''
       }`}
       style={enterDelay ? { animationDelay: `${enterDelay}ms`, animationFillMode: 'backwards' } : undefined}
+      onMouseEnter={(e) => {
+        // Hover preview is pointer-only — touch devices never fire a real hover.
+        if (window.matchMedia('(hover: hover)').matches) {
+          setPreviewAt(e.currentTarget.getBoundingClientRect());
+        }
+      }}
+      onMouseLeave={() => setPreviewAt(null)}
     >
       <button
         type="button"
@@ -100,14 +133,10 @@ export function Card({ card, selected, dimmed, highlight, onClick, small, fluid,
           </span>
         )}
       </button>
-      {/* Full-size art preview on hover — desktop only, never captures the pointer. */}
-      {!artFailed && (
-        <span className="pointer-events-none absolute left-full top-0 z-40 ml-2 hidden w-80 lg:group-hover:block">
-          <span className="relative block aspect-[600/838] overflow-hidden rounded-lg shadow-2xl ring-1 ring-brass-600/60">
-            <Image src={artUrl(card.definitionId)} alt="" fill sizes="320px" className="object-cover" />
-          </span>
-        </span>
-      )}
+      {/* Full-size art preview on hover, portaled above everything. */}
+      {!artFailed &&
+        previewAt &&
+        createPortal(<HoverPreview anchor={previewAt} src={artUrl(card.definitionId)} />, document.body)}
     </span>
   );
 }
