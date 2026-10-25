@@ -43,9 +43,11 @@ const config: Config = {
         mat: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.5)',
       },
       keyframes: {
+        // Box-shadow only — a transform here would override the rotate-90 class
+        // on rested-but-actionable cards, making them render upright.
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 10px 2px rgba(52, 211, 153, 0.5)', transform: 'scale(1)' },
-          '50%': { boxShadow: '0 0 22px 7px rgba(52, 211, 153, 0.85)', transform: 'scale(1.03)' },
+          '0%, 100%': { boxShadow: '0 0 10px 2px rgba(52, 211, 153, 0.5)' },
+          '50%': { boxShadow: '0 0 22px 7px rgba(52, 211, 153, 0.85)' },
         },
         'card-enter': {
           '0%': { opacity: '0', transform: 'translateY(8px) scale(0.96)' },
